@@ -1,4 +1,4 @@
-public class Klient {
+public class Klient{
     private String imie;
     private String nazwisko;
     private String nr_telefonu;
@@ -6,6 +6,16 @@ public class Klient {
     private String adres;
     private String email;
     private String haslo;
+
+    public Klient(String imie, String nazwisko, String nr_telefonu, String miasto, String adres, String email, String haslo) {
+        this.imie = imie;
+        this.nazwisko = nazwisko;
+        this.nr_telefonu = nr_telefonu;
+        this.miasto = miasto;
+        this.adres = adres;
+        this.email = email;
+        this.haslo = haslo;
+    }
 
     public String getImie() {
         return imie;
@@ -62,6 +72,5 @@ public class Klient {
     public void setHaslo(String haslo) {
         this.haslo = haslo;
     }
-
 
 }
