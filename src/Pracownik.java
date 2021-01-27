@@ -1,5 +1,5 @@
 
 
-public class Pracownik {
+public class Pracownik implements Uzytkownik{
 
 }

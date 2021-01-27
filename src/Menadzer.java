@@ -1,20 +1,29 @@
+import com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-public class Menadzer extends Pracownik {
+public class Menadzer extends Pracownik implements Uzytkownik {
 
     /*
     Zwraca aktualny balans budżetu
      */
     public static int podgladBudzetu(ResultSet myRs, Statement myStat) throws SQLException {
-        String sql = "CALL PodgladZyskow()";
-        myRs = myStat.executeQuery(sql);
-        int zyski = myRs.getInt("SumaZyskow");
-        sql = "CALL PodgladStrat()";
-        myRs = myStat.executeQuery(sql);
-        int straty = myRs.getInt("SumaStrat");
-        return zyski - straty;
+        int zyski, straty;
+        try {
+           String sql = "CALL PodgladZyskow()";
+           myRs = myStat.executeQuery(sql);
+            zyski = myRs.getInt("SumaZyskow");
+           sql = "CALL PodgladStrat()";
+           myRs = myStat.executeQuery(sql);
+            straty = myRs.getInt("SumaStrat");
+            return zyski - straty;
+
+        }catch(SQLException e){
+           e.printStackTrace();
+       }
+        return 0;
     }
 
     public static void dodajDostawce(Statement myStat, String[] dane) throws SQLException {
@@ -37,4 +46,5 @@ public class Menadzer extends Pracownik {
         }
 
     }
+
 }
