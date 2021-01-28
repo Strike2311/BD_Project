@@ -1,4 +1,13 @@
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.time.LocalDateTime;
+
+
 public class Klient{
+
     private String imie;
     private String nazwisko;
     private String nr_telefonu;
@@ -73,4 +82,52 @@ public class Klient{
         this.haslo = haslo;
     }
 
-}
+    public void zamowienieDostawy(ResultSet myRs, Statement myStat, ArrayList<String> dane) throws SQLException{
+        //struktura danych [idPartii, cena, ilosc...]
+
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        LocalDateTime now = LocalDateTime.now();
+        try {
+            String sql = "INSERT INTO zamowienia (Klienci_id_klienci, data_zamowienia, status) " +
+                "VALUES((SELECT id_klienci FROM klienci WHERE imie = '" + this.imie + "' AND nazwisko = '"
+                + this.nazwisko + "' AND adres = '" + this.adres + "'ORDER BY id_klienci DESC LIMIT 1), '" + dtf.format(now) + "','przygotowane do nadania') ";
+                 myStat.executeUpdate(sql);
+
+            sql = "SELECT * FROM zamowienia ORDER BY idZamowienia DESC LIMIT 1";
+            myRs = myStat.executeQuery(sql);
+            myRs.next();
+            String idZamowienia = myRs.getString("idZamowienia");
+
+            for (int i = 0; i < dane.size(); i=i+3) {
+                sql = "INSERT INTO patriejednegozamowienia (Zamowienia_idZamowienia, Partia_id_partii, ilosc) " +
+                        "VALUE("+idZamowienia+", "+dane.get(i)+","+dane.get(i+2)+") ";
+                myStat.executeUpdate(sql);
+                sql = "INSERT INTO budzet (zyski) " +
+                        "VALUE("+dane.get(i+1)+") ";
+                myStat.executeUpdate(sql);
+                }
+            } catch(SQLException throwables){
+                throwables.printStackTrace();
+
+            }
+        }
+        public void sprawdzenieStanuDostawy(ResultSet myRs, Statement myStat) throws SQLException{
+            try {
+                String sql = "SELECT data_zamowienia, data_nadania, status FROM zamowienia WHERE Klienci_id_klienci = " +
+                        "(SELECT id_klienci FROM klienci WHERE imie = '" + this.imie + "' AND nazwisko = '"
+                      + this.nazwisko + "' AND adres = '" + this.adres + "'ORDER BY id_klienci DESC LIMIT 1)";
+
+                myRs = myStat.executeQuery(sql);
+                while (myRs.next()){
+                    if(myRs.getString("data_nadania") != null)
+                    System.out.println(myRs.getString("data_zamowienia")+"  "+myRs.getString("data_nadania")+"  "+myRs.getString("status"));
+                    else
+                        System.out.println(myRs.getString("data_zamowienia")+"  "+"brak danych"+"  "+myRs.getString("status"));
+
+                }
+            }catch(SQLException e){
+                e.printStackTrace();
+            }
+        }
+    }
+
