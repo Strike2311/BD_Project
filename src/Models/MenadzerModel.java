@@ -1,14 +1,40 @@
 package Models;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 
-public class MenadzerModel implements UzytkownikModel {
+public class MenadzerModel extends LoginModel{
+
+    public MenadzerModel(String email, String haslo) {
+        super(email, haslo);
+        String jdbcsrc = "jdbc:mysql://localhost:3306/mydb";
+        String login = "root";
+        String password = "root1234";
+        try {
+            Connection myCon = DriverManager.getConnection(jdbcsrc, login, password);
+            Statement myStat_tmp = myCon.createStatement();
+
+            ResultSet myRs_tmp;
+            //Zmiana statusu zamówianie na reklamacje
+
+
+
+            String sql = "SELECT uprawnienia FROM pracownicy WHERE email = '"+email+"' AND haslo = '"+haslo+"'";
+            myRs_tmp = myStat_tmp.executeQuery(sql);
+            if(myRs_tmp.next()) {
+                if(myRs_tmp.getString("uprawnienia").equals("Menadżer")) {
+                    super.setCzyZalogowany(true);
+                }
+                else super.setCzyZalogowany(false);
+            }
+            else super.setCzyZalogowany(false);
+        }catch(SQLException e){
+            e.printStackTrace();
+        }
+    }
 
     /*
-    Zwraca aktualny balans budżetu
-     */
+        Zwraca aktualny balans budżetu
+         */
     public static int podgladBudzetu(ResultSet myRs, Statement myStat) throws SQLException {
         int zyski, straty;
         try {

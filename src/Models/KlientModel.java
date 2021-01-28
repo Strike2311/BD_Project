@@ -6,27 +6,57 @@ import java.util.ArrayList;
 import java.time.LocalDateTime;
 
 
-public class KlientModel {
-
-
+public class KlientModel extends LoginModel {
 
     private String imie;
     private String nazwisko;
     private String nr_telefonu;
     private String miasto;
     private String adres;
-    private String email;
-    private String haslo;
+   // private String email;
+   // private String haslo;
+   // private boolean czyZalogowany;
+
+
 
 
     public KlientModel(String imie, String nazwisko, String nr_telefonu, String miasto, String adres, String email, String haslo) {
+        super(email, haslo);
         this.imie = imie;
         this.nazwisko = nazwisko;
         this.nr_telefonu = nr_telefonu;
         this.miasto = miasto;
         this.adres = adres;
-        this.email = email;
-        this.haslo = haslo;
+
+    }
+    public KlientModel(String email, String haslo) {
+        super(email, haslo);
+        String jdbcsrc = "jdbc:mysql://localhost:3306/mydb";
+        String login = "root";
+        String password = "root1234";
+        try {
+            Connection myCon = DriverManager.getConnection(jdbcsrc, login, password);
+            Statement myStat_tmp = myCon.createStatement();
+
+        ResultSet myRs_tmp;
+        //Zmiana statusu zamówianie na reklamacje
+
+
+
+            String sql = "SELECT imie, nazwisko, nr_telefonul, miasto, adres FROM klienci WHERE email = '"+email+"' AND haslo = '"+haslo+"'";
+        myRs_tmp = myStat_tmp.executeQuery(sql);
+        if(myRs_tmp.next()) {
+            this.imie = myRs_tmp.getString("imie");
+            this.nazwisko = myRs_tmp.getString("nazwisko");
+            this.adres = myRs_tmp.getString("adres");
+            this.nr_telefonu = myRs_tmp.getString("nr_telefonul");
+            this.miasto = myRs_tmp.getString("miasto");
+            super.setCzyZalogowany(true);
+        }
+        else super.setCzyZalogowany(false);
+        }catch(SQLException e){
+            e.printStackTrace();
+        }
     }
 
     public String getImie() {
@@ -69,29 +99,13 @@ public class KlientModel {
         this.adres = adres;
     }
 
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getHaslo() {
-        return haslo;
-    }
-
-    public void setHaslo(String haslo) {
-        this.haslo = haslo;
-    }
-
     public void zamowienieDostawy(ResultSet myRs, Statement myStat, ArrayList<String> dane) throws SQLException {
         //struktura danych [idPartii, cena, ilosc...]
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         LocalDateTime now = LocalDateTime.now();
         try {
             String sql = "INSERT INTO zamowienia (Klienci_id_klienci, data_zamowienia, status) " +
-                    "VALUES(CALL GetIdKlienta('" + this.imie + "','" + this.nazwisko + "','" + this.email + "'), '" + dtf.format(now) + "','przygotowane do nadania') ";
+                    "VALUES(CALL GetIdKlienta('" + this.imie + "','" + this.nazwisko + "','" + super.getEmail() + "'), '" + dtf.format(now) + "','przygotowane do nadania') ";
             myStat.executeUpdate(sql);
 
             sql = "SELECT * FROM zamowienia ORDER BY idZamowienia DESC LIMIT 1";
@@ -115,7 +129,7 @@ public class KlientModel {
     public void sprawdzenieStanuDostawy(ResultSet myRs, Statement myStat) throws SQLException {
         try {
             String sql = "SELECT data_zamowienia, data_nadania, status FROM zamowienia WHERE Klienci_id_klienci = " +
-                    "GetIdKlienta('" + this.imie + "','" + this.nazwisko + "','" + this.email + "')";
+                    "GetIdKlienta('" + this.imie + "','" + this.nazwisko + "','" + super.getEmail() + "')";
 
             myRs = myStat.executeQuery(sql);
             while (myRs.next()) {

@@ -65,7 +65,35 @@ public static void testSQL(){
     //dane []
 
     }
+    public static LoginModel logowanie(String login, String haslo, int userType){
+    //userType 1-klient 2-pracownik 3-menadżer
+        LoginModel user;
 
+        switch (userType) {
+            case 1:
+                 user = new KlientModel(login,haslo);
+                if(user.getCzyZalogowany())
+                    return user;
+                break;
+            case 2:
+                user = new PracownikModel(login,haslo);
+                if(user.getCzyZalogowany())
+                    return user;
+                break;
+            case 3:
+                user = new MenadzerModel(login,haslo);
+                if(user.getCzyZalogowany())
+                    return user;
+
+                break;
+            default:
+                throw new IllegalStateException("Unexpected value: " + userType);
+        }
+
+
+
+        return null;
+    }
     public static void main (String[] args){
         String jdbcsrc = "jdbc:mysql://localhost:3306/mydb";
         String login = "root";
@@ -79,12 +107,14 @@ public static void testSQL(){
             //egzekucja konkretnej komendy SQL i przypisanie do ResultSet
             ResultSet myRs = null;
 
-        MenadzerModel model = new MenadzerModel();
+       // MenadzerModel model = new MenadzerModel();
         String []dane = {"6", "2","Inne Przyprawy"};
-        model.wyswietlDostawcow(myRs,myStat, "Ziemniaki");
-
-
-
+      // model.wyswietlDostawcow(myRs,myStat, "Ziemniaki");
+           LoginModel currUser = logowanie("kozey.sven@example.net","pyon1111", 2);
+            if(currUser == null)
+                System.out.println("błąd logowania");
+            else
+            System.out.println(currUser.getEmail() + "  " + currUser.getHaslo());
         } catch (SQLException c) {
             c.printStackTrace();
         }
