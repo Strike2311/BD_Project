@@ -6,6 +6,11 @@
 /dataSources.local.xml
 # Editor-based HTTP Client requests
 /httpRequests/
+/dataSources/7d30f783-190c-4783-b7cc-ef9ff34246de.xml
+/dataSources.xml
+/dataSources/7d30f783-190c-4783-b7cc-ef9ff34246de/storage_v2/_src_/schema/information_schema.FNRwLQ.meta
+/dataSources/7d30f783-190c-4783-b7cc-ef9ff34246de/storage_v2/_src_/schema/mydb.Kl8zAA.meta
+/dataSources/7d30f783-190c-4783-b7cc-ef9ff34246de/storage_v2/_src_/schema/mydb.Kl8zAA.zip
 /dataSources/f2eb728f-0f63-434b-90a7-da716c724f34.xml
 /dataSources/f2eb728f-0f63-434b-90a7-da716c724f34/storage_v2/_src_/schema/information_schema.FNRwLQ.meta
 /dataSources/f2eb728f-0f63-434b-90a7-da716c724f34/storage_v2/_src_/schema/mydb.Kl8zAA.meta

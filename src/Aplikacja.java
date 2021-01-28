@@ -1,3 +1,7 @@
+import Views.BudzetView;
+import Views.ZamowieniaView;
+
+import javax.swing.*;
 import java.sql.*;
 
 public class Aplikacja {
@@ -60,6 +64,8 @@ public class Aplikacja {
             c.printStackTrace();
         }
 
+    //ZamowieniaView zam = new ZamowieniaView();
+        // udzetView bud = new BudzetView();
 
     }
 }
