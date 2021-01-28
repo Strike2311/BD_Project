@@ -1,15 +1,17 @@
+import com.mysql.cj.jdbc.exceptions.SQLError;
+
 import java.sql.*;
+import java.util.ArrayList;
 
 public class Aplikacja {
 
 
-
-    public static void main (String[] args){
-        String jdbcsrc = "jdbc:mysql://localhost:3306/mydb";
-        String login = "root";
-        String password = "root1234";
-
+    public static void testSQL(){
         try {
+            String jdbcsrc = "jdbc:mysql://localhost:3306/mydb";
+            String login = "root";
+            String password = "root1234";
+
             //ustala połączenie z bazą danych
             Connection myCon = DriverManager.getConnection(jdbcsrc,login,password);
             //tworzenie klasy do egzekucji komend
@@ -27,25 +29,25 @@ public class Aplikacja {
 
             //Określenie komendy dodającej elemnt do tabeli jako string
             String sql = "INSERT INTO klienci " +
-                   "(imie, nazwisko, nr_telefonul, miasto, adres, email, haslo) " +
-                   "values('Kacper', 'Kucharczyk', '664278054', 'Wrocław', 'Elizy Orzeszkowej 52', 'kacper0070@wp.pl', 'cotamcotam123')";
+                    "(imie, nazwisko, nr_telefonul, miasto, adres, email, haslo) " +
+                    "values('Kacper', 'Kucharczyk', '664278054', 'Wrocław', 'Elizy Orzeszkowej 52', 'kacper0070@wp.pl', 'cotamcotam123')";
             //Wywołanie komendy na tabeli
             myStat.executeUpdate(sql);
 
             //Reset wartości myRS, bo .next() przesunęło 'głowice' na koniec
+
             myRs = myStat.executeQuery("SELECT * FROM klienci WHERE imie = 'Kacper'");
 
             //Wypisywanie ResultSet jak stringa, aby zobaczyc efekt dodawania
             while(myRs.next()){
-                    System.out.println(myRs.getString("nazwisko")+", "+ myRs.getString("adres"));
+                System.out.println(myRs.getString("nazwisko")+", "+ myRs.getString("adres"));
             }
             System.out.println("^Wypisanie 2");
 
 
 
             //Usuwanie dodanego elementu wczesniej elemetu
-            sql = "DELETE FROM klienci WHERE imie = 'Kacper'";
-            myStat.executeUpdate(sql);
+
 
             //Reset wartości myRS, bo .next() przesunęło 'głowice' na koniec
             myRs = myStat.executeQuery("SELECT * FROM klienci WHERE imie = 'Kacper'");
@@ -59,7 +61,15 @@ public class Aplikacja {
         } catch (SQLException c) {
             c.printStackTrace();
         }
-
+    }
+    public static void main (String[] args) throws SQLException {
+        String jdbcsrc = "jdbc:mysql://localhost:3306/mydb";
+        String login = "root";
+        String password = "root1234";
+        //ustala połączenie z bazą danych
 
     }
+
+
+
 }
