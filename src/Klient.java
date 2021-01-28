@@ -111,5 +111,23 @@ public class Klient{
 
             }
         }
+        public void sprawdzenieStanuDostawy(ResultSet myRs, Statement myStat) throws SQLException{
+            try {
+                String sql = "SELECT data_zamowienia, data_nadania, status FROM zamowienia WHERE Klienci_id_klienci = " +
+                        "(SELECT id_klienci FROM klienci WHERE imie = '" + this.imie + "' AND nazwisko = '"
+                      + this.nazwisko + "' AND adres = '" + this.adres + "'ORDER BY id_klienci DESC LIMIT 1)";
+
+                myRs = myStat.executeQuery(sql);
+                while (myRs.next()){
+                    if(myRs.getString("data_nadania") != null)
+                    System.out.println(myRs.getString("data_zamowienia")+"  "+myRs.getString("data_nadania")+"  "+myRs.getString("status"));
+                    else
+                        System.out.println(myRs.getString("data_zamowienia")+"  "+"brak danych"+"  "+myRs.getString("status"));
+
+                }
+            }catch(SQLException e){
+                e.printStackTrace();
+            }
+        }
     }
 
