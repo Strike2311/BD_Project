@@ -6,24 +6,27 @@ import java.sql.*;
 
 public class MenadzerModel extends LoginModel{
 
+    String jdbcsrc = "jdbc:mysql://localhost:3306/mydb";
+    String login = "root";
+    String password = "root1234";
+    Connection myCon;
+    Statement myStat;
+    ResultSet myRs;
+
     public MenadzerModel(String email, String haslo) {
         super(email, haslo);
-        String jdbcsrc = "jdbc:mysql://localhost:3306/mydb";
-        String login = "root";
-        String password = "root1234";
-        try {
-            Connection myCon = DriverManager.getConnection(jdbcsrc, login, password);
-            Statement myStat_tmp = myCon.createStatement();
 
-            ResultSet myRs_tmp;
+        try
+        {
+            myCon = DriverManager.getConnection(jdbcsrc, login, password);
+            myStat = myCon.createStatement();
+
             //Zmiana statusu zamówianie na reklamacje
 
-
-
             String sql = "SELECT uprawnienia FROM pracownicy WHERE email = '"+email+"' AND haslo = '"+haslo+"'";
-            myRs_tmp = myStat_tmp.executeQuery(sql);
-            if(myRs_tmp.next()) {
-                if(myRs_tmp.getString("uprawnienia").equals("Menadżer")) {
+            myRs = myStat.executeQuery(sql);
+            if(myRs.next()) {
+                if(myRs.getString("uprawnienia").equals("Menadżer")) {
                     super.setCzyZalogowany(true);
                     System.out.println("zalogowano");
                 }
@@ -46,16 +49,18 @@ public class MenadzerModel extends LoginModel{
      /*/
     / /   Zwraca aktualny balans budżetu
    /*/
-    public static int podgladBudzetu(ResultSet myRs, Statement myStat) throws SQLException {
-        int zyski, straty;
+    public float podgladBudzetu(Statement st, ResultSet rs) throws SQLException {
+        float zyski, straty;
         try {
            String sql = "CALL PodgladZyskow()";
-           myRs = myStat.executeQuery(sql);
-            zyski = myRs.getInt("SumaZyskow");
+           rs = st.executeQuery(sql);
+           rs.next();
+           zyski = rs.getFloat("SumaZyskow");
            sql = "CALL PodgladStrat()";
-           myRs = myStat.executeQuery(sql);
-            straty = myRs.getInt("SumaStrat");
-            return zyski - straty;
+           rs = st.executeQuery(sql);
+           rs.next();
+           straty = rs.getFloat("SumaStrat");
+           return zyski - straty;
 
         }catch(SQLException e){
            e.printStackTrace();
@@ -65,7 +70,7 @@ public class MenadzerModel extends LoginModel{
 
     public static void dodajDostawce(Statement myStat, String[] dane) throws SQLException {
         try {
-            String sql = "CALL DodajDostawce(" + dane[0] + ", " + dane[1] + ", " + dane[2] + ", " + dane[3] + ", " + dane[4] + ")";
+            String sql = "CALL DodajDostawce('" + dane[0] + "', '" + dane[1] + "', '" + dane[2] + "', '" + dane[3] + "', '" + dane[4] + "')";
             myStat.executeUpdate(sql);
 
         }catch(SQLException e){
@@ -73,9 +78,10 @@ public class MenadzerModel extends LoginModel{
         }
 
     }
-    public static void usunDostawce(Statement myStat, String[] dane) throws SQLException {
+    public static void usunDostawce(Statement myStat, int id) throws SQLException {
         try {
-            String sql = "CALL UsunDostawce(" + dane[0] + ", " + dane[1] + ", " + dane[2] + ", " + dane[3] + ", " + dane[4] + ")";
+            String sql = "CALL UsunDostawce_ID('" + id + "')";
+            //", '" + dane[1] + "', '" + dane[2] + "', '" + dane[3] + "', '" + dane[4] + "')";
             myStat.executeUpdate(sql);
 
         }catch(SQLException e){
@@ -123,8 +129,8 @@ public class MenadzerModel extends LoginModel{
 
             String sql = "UPDATE surowce SET ilosc = ilosc + '"+dane[1]+"' WHERE nazwa = '"+dane[2]+"'";
             myStat.executeUpdate(sql);
-            sql = "INSERT INTO budzet (straty) VALUES("+dane[1]+"* (SELECT cena FROM dostawcy WHERE id_dostawcy = '"+dane[0]+"'))";
-            myStat.executeUpdate(sql);
+            //sql = "INSERT INTO budzet (straty) VALUES("+dane[1]+"* (SELECT cena FROM dostawcy WHERE id_dostawcy = '"+dane[0]+"'))";
+            //myStat.executeUpdate(sql);
         }catch(SQLException e){
             e.printStackTrace();
         }
@@ -144,5 +150,27 @@ public class MenadzerModel extends LoginModel{
 
     }
 
+    public Connection getMyCon() {
+        return myCon;
+    }
 
+    public void setMyCon(Connection myCon) {
+        this.myCon = myCon;
+    }
+
+    public Statement getMyStat() {
+        return myStat;
+    }
+
+    public void setMyStat(Statement myStat) {
+        this.myStat = myStat;
+    }
+
+    public ResultSet getMyRs() {
+        return myRs;
+    }
+
+    public void setMyRs(ResultSet myRs) {
+        this.myRs = myRs;
+    }
 }

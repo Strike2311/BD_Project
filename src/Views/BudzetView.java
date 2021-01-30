@@ -20,16 +20,30 @@ public class BudzetView extends JDialog{
     private JScrollPane scrlPane2;
     private JTable stratyTable;
     private JTable zyskiTable;
-    private DefaultTableModel tableModel1 = new DefaultTableModel(columnNames1, 0);
-    private DefaultTableModel tableModel2 = new DefaultTableModel(columnNames2, 0);
+    private DefaultTableModel tableModel1 = new DefaultTableModel(columnNames1, 0)
+    {
+
+        @Override
+        public boolean isCellEditable(int row, int column) {
+        //all cells false
+        return false;
+        }
+    };
+    private DefaultTableModel tableModel2 = new DefaultTableModel(columnNames2, 0)
+    {
+
+        @Override
+        public boolean isCellEditable(int row, int column) {
+            //all cells false
+            return false;
+        }
+    };
     ResultSet myRs;
     Connection myCon;
     Statement myStat;
 
-    public BudzetView()
+    public BudzetView(float bilans)
     {
-        //stratyTable = new JTable();
-        //zyskiTable = new JTable();
         setSize(400, 500);
         setTitle("Budzet");
         setContentPane(mainPane);
@@ -53,6 +67,7 @@ public class BudzetView extends JDialog{
                 {
                     String[] data = { idBud, strata };
                     tableModel1.addRow(data);
+
                 }
                 if(zysk != null)
                 {
@@ -66,6 +81,11 @@ public class BudzetView extends JDialog{
         {
             JOptionPane.showMessageDialog(null,"Error in Zamowienia Grid View..... "+c);
         }
+
+        bilansTF.setText(Float.toString(bilans));
+        bilansTF.setEditable(false);
+
+
 
         stratyTable.setModel(tableModel1);
         zyskiTable.setModel(tableModel2);
