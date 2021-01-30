@@ -1,5 +1,7 @@
 package Models;
 
+import com.mysql.cj.protocol.x.SyncFlushDeflaterOutputStream;
+
 import java.sql.*;
 
 public class MenadzerModel extends LoginModel{
@@ -23,10 +25,19 @@ public class MenadzerModel extends LoginModel{
             if(myRs_tmp.next()) {
                 if(myRs_tmp.getString("uprawnienia").equals("Menadżer")) {
                     super.setCzyZalogowany(true);
+                    System.out.println("zalogowano");
                 }
-                else super.setCzyZalogowany(false);
+                else
+                {
+                    super.setCzyZalogowany(false);
+                    System.out.println("błąd1");
+                }
             }
-            else super.setCzyZalogowany(false);
+            else
+            {
+                super.setCzyZalogowany(false);
+                System.out.println("błąd2");
+            }
         }catch(SQLException e){
             e.printStackTrace();
         }

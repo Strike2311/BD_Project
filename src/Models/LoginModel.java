@@ -8,6 +8,9 @@ public class LoginModel {
         this.email = email;
         this.haslo = haslo;
     }
+    public LoginModel(){
+
+    }
 
     public String getEmail() {
         return email;

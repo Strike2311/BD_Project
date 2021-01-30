@@ -1,23 +1,35 @@
 package Models;
 
+import Controllers.LoginController;
+import Views.BudzetView;
+import Views.LoginView;
+import Views.ZamowieniaView;
+
 import java.sql.*;
 
 public class Aplikacja {
 
-public static void testSQL(){
-    String jdbcsrc = "jdbc:mysql://localhost:3306/mydb";
-    String login = "root";
-    String password = "root1234";
-
-    try {
-        //ustala połączenie z bazą danych
-        Connection myCon = DriverManager.getConnection(jdbcsrc,login,password);
-        //tworzenie klasy do egzekucji komend
-        Statement myStat = myCon.createStatement();
-        //egzekucja konkretnej komendy SQL i przypisanie do ResultSet
-        ResultSet myRs = myStat.executeQuery("SELECT * FROM klienci WHERE imie = 'Kacper'");
+    public static String jdbcsrc = "jdbc:mysql://localhost:3306/mydb";
+    public static String login = "root";
+    public static String password = "root1234";
+    public static Connection myCon;
 
 
+    public static void testSQL() {
+
+
+        try {
+            //ustala połączenie z bazą danych
+            myCon = DriverManager.getConnection(jdbcsrc, login, password);
+            //tworzenie klasy do egzekucji komend
+            Statement myStat = myCon.createStatement();
+            //egzekucja konkretnej komendy SQL i przypisanie do ResultSet
+            ResultSet myRs = myStat.executeQuery("SELECT * FROM klienci WHERE imie = 'Kacper'");
+        } catch (SQLException c) {
+            c.printStackTrace();
+        }
+    }
+/*
         //Wypisywanie ResultSet jak stringa
         while(myRs.next()){
             System.out.println(myRs.getString("nazwisko")+", "+ myRs.getString("adres"));
@@ -60,41 +72,14 @@ public static void testSQL(){
         c.printStackTrace();
       }
     }
-
+*/
     public void rejestracja(String [] dane){
     //dane []
 
     }
-    public static LoginModel logowanie(String login, String haslo, int userType){
-    //userType 1-klient 2-pracownik 3-menadżer
-        LoginModel user;
 
-        switch (userType) {
-            case 1:
-                 user = new KlientModel(login,haslo);
-                if(user.getCzyZalogowany())
-                    return user;
-                break;
-            case 2:
-                user = new PracownikModel(login,haslo);
-                if(user.getCzyZalogowany())
-                    return user;
-                break;
-            case 3:
-                user = new MenadzerModel(login,haslo);
-                if(user.getCzyZalogowany())
-                    return user;
-
-                break;
-            default:
-                throw new IllegalStateException("Unexpected value: " + userType);
-        }
-
-
-
-        return null;
-    }
     public static void main (String[] args){
+/*
         String jdbcsrc = "jdbc:mysql://localhost:3306/mydb";
         String login = "root";
         String password = "root1234";
@@ -118,8 +103,20 @@ public static void testSQL(){
         } catch (SQLException c) {
             c.printStackTrace();
         }
+*/
+
+        //LoginModel l = new LoginModel();
+        //testSQL();
+        LoginController l = new LoginController();
 
 
+        /*
+        BudzetView bv = new BudzetView();
+        ZamowieniaView z = new ZamowieniaView();
+        LoginView l = new LoginView();
+        */
 
     }
+
+
 }

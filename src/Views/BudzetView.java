@@ -93,4 +93,9 @@ public class BudzetView extends JDialog{
         this.bilansTF = bilansTF;
     }
 
+    /*
+    public void dispose() {
+        dispose();
+    }
+*/
 }
