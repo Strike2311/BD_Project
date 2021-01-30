@@ -32,9 +32,9 @@ public class MenadzerModel extends LoginModel{
         }
     }
 
-    /*
-        Zwraca aktualny balans budżetu
-         */
+     /*/
+    / /   Zwraca aktualny balans budżetu
+   /*/
     public static int podgladBudzetu(ResultSet myRs, Statement myStat) throws SQLException {
         int zyski, straty;
         try {
