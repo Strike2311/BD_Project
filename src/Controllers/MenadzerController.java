@@ -139,35 +139,78 @@ public class MenadzerController {
         SurowceView view_surowce = new SurowceView(model.getMyStat(), model.getMyRs());
         view.setVisible(false);
         view_surowce.getZamowButton().addActionListener(e ->
-        {   view_surowce.setVisible(false);
+        {
             int column = 1;
             int row = view_surowce.getDostawcyTable().getSelectedRow();
-            String nazwa = view_surowce.getDostawcyTable().getModel().getValueAt(row, column).toString();
-            if (nazwa != null) {
+            if(row != -1)
+            {
+                view_surowce.setVisible(false);
+                String nazwa = view_surowce.getDostawcyTable().getModel().getValueAt(row, column).toString();
+                if (nazwa != null) {
 
-                ZamowSurowiecView zamawianie_surowcow_view = new ZamowSurowiecView(model.getMyStat(), model.getMyRs(), nazwa);
-                zamawianie_surowcow_view.getZmowButton().addActionListener(e1 -> {
-                    try {
-                        int column2 = 0;
-                        int row2 = zamawianie_surowcow_view.getDostawcyTable().getSelectedRow();
-                        int id_dost = Integer.parseInt(zamawianie_surowcow_view.getDostawcyTable().getModel().getValueAt(row2, column2).toString());
-                        int ilosc = Integer.parseInt(zamawianie_surowcow_view.getIloscTextField().getText());
-                        String dane[] = {"" + id_dost, "" + ilosc, nazwa};
-                        model.zamowienieSurowcow(model.getMyStat(), model.getMyRs(), dane);
-                        view_surowce.refresh(model.getMyStat(), model.getMyRs());
-                        JOptionPane.showMessageDialog(null,
-                                "Poprawnie dodano surowce");
-                    }catch (SQLException x) {
-                        JOptionPane.showMessageDialog(null, x.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-                        x.printStackTrace();
-                    }
-                });
-                zamawianie_surowcow_view.getWsteczButton().addActionListener(e1 ->
-                {
-                    zamawianie_surowcow_view.dispose();
-                    view_surowce.setVisible(true);
-                });
+                    ZamowSurowiecView zamawianie_surowcow_view = new ZamowSurowiecView(model.getMyStat(), model.getMyRs(), nazwa);
+                    zamawianie_surowcow_view.getZmowButton().addActionListener(e1 -> {
+                        try {
+                            int column2 = 0;
+                            int row2 = zamawianie_surowcow_view.getDostawcyTable().getSelectedRow();
+                            if(row2 != -1)
+                            {
+                                String id_dost = zamawianie_surowcow_view.getDostawcyTable().getModel().getValueAt(row2, column2).toString();
+                                String ilosc = zamawianie_surowcow_view.getIloscTextField().getText();
+                                if(ilosc.length() > 5 || ilosc.length() < 1)
+                                {
+                                    JOptionPane.showMessageDialog(null, "Wprowadź poprawną ilość",
+                                            "Error", JOptionPane.ERROR_MESSAGE);
+                                }
+                                else
+                                {
+                                    char c;
+                                    int digitCount = 0;
+                                    for (int j = 0; j < ilosc.length(); j++) {
+                                        c = ilosc.charAt(j);
+                                        if (Character.isDigit(c)) {
+                                            digitCount++;
+                                        }
+                                    }
+                                    if(digitCount != ilosc.length())
+                                    {
+                                        JOptionPane.showMessageDialog(null, "Wprowadź poprawną ilość",
+                                                "Error", JOptionPane.ERROR_MESSAGE);
+                                    }
+                                    else
+                                    {
+                                        String dane[] = {id_dost, ilosc, nazwa};
+                                        model.zamowienieSurowcow(model.getMyStat(), model.getMyRs(), dane);
+                                        view_surowce.refresh(model.getMyStat(), model.getMyRs());
+                                        JOptionPane.showMessageDialog(null,
+                                                "Poprawnie dodano surowce");
+                                    }
+                                }
 
+                            }
+                            else
+                            {
+                                JOptionPane.showMessageDialog(null, "Wybierz wiersz",
+                                        "Error", JOptionPane.ERROR_MESSAGE);
+                            }
+
+                        }catch (SQLException x) {
+                            JOptionPane.showMessageDialog(null, x.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                            x.printStackTrace();
+                        }
+                    });
+                    zamawianie_surowcow_view.getWsteczButton().addActionListener(e1 ->
+                    {
+                        zamawianie_surowcow_view.dispose();
+                        view_surowce.setVisible(true);
+                    });
+
+                }
+            }
+            else
+            {
+                JOptionPane.showMessageDialog(null, "Wybierz wiersz",
+                        "Error", JOptionPane.ERROR_MESSAGE);
             }
         });
         view_surowce.getWsteczButton().addActionListener(e ->
@@ -175,8 +218,6 @@ public class MenadzerController {
             view_surowce.dispose();
             view.setVisible(true);
         });
-
-
     }
 
     private void showBudzet(){

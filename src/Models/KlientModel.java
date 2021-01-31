@@ -46,13 +46,13 @@ public class KlientModel extends LoginModel {
 
 
 
-            String sql = "SELECT imie, nazwisko, nr_telefonul, miasto, adres FROM klienci WHERE email = '"+email+"' AND haslo = '"+haslo+"'";
+            String sql = "SELECT imie, nazwisko, nr_telefonu, miasto, adres FROM klienci WHERE email = '"+email+"' AND haslo = '"+haslo+"'";
         myRs_tmp = myStat.executeQuery(sql);
         if(myRs_tmp.next()) {
             this.imie = myRs_tmp.getString("imie");
             this.nazwisko = myRs_tmp.getString("nazwisko");
             this.adres = myRs_tmp.getString("adres");
-            this.nr_telefonu = myRs_tmp.getString("nr_telefonul");
+            this.nr_telefonu = myRs_tmp.getString("nr_telefonu");
             this.miasto = myRs_tmp.getString("miasto");
             super.setCzyZalogowany(true);
         }
