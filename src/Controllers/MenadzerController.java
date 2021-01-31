@@ -113,9 +113,9 @@ public class MenadzerController {
                     try {
                         int column2 = 0;
                         int row2 = zamawianie_surowcow_view.getDostawcyTable().getSelectedRow();
-                        int value = Integer.parseInt(zamawianie_surowcow_view.getDostawcyTable().getModel().getValueAt(row2, column2).toString());
+                        int id_dost = Integer.parseInt(zamawianie_surowcow_view.getDostawcyTable().getModel().getValueAt(row2, column2).toString());
                         int ilosc = Integer.parseInt(zamawianie_surowcow_view.getIloscTextField().getText());
-                        String dane[] = {"" + value, "" + ilosc, nazwa};
+                        String dane[] = {"" + id_dost, "" + ilosc, nazwa};
                         model.zamowienieSurowcow(model.getMyStat(), model.getMyRs(), dane);
                         view_surowce.refresh(model.getMyStat(), model.getMyRs());
                         JOptionPane.showMessageDialog(null,
@@ -138,8 +138,28 @@ public class MenadzerController {
             view_surowce.setVisible(false);
             view.setVisible(true);
         });
-    }
 
+
+    }
+/*
+    void sprawdz_dostawce(String id_dost)
+    {
+        try {
+            String sql = "SELECT  FROM surowce";
+            model.getMyStat().executeQuery(sql);
+
+            rs = model.getMyRs() ;
+            rs = model.getMyStat().executeQuery(sql);
+            rs.next();
+            String hrs = rs.getString("liczba_godzin");
+            hours = hrs;
+
+        }catch (SQLException x) {
+            JOptionPane.showMessageDialog(null, x.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            x.printStackTrace();
+        }
+    }
+*/
     private void showBudzet(){
         view.setVisible(false);
         try{

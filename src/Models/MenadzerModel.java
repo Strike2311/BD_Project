@@ -127,10 +127,29 @@ public class MenadzerModel extends LoginModel{
     public void zamowienieSurowcow(Statement myStat, ResultSet myRs, String dane[])throws SQLException{
         try {//dane format [id_dostawcy, ilosc_zamowienia, nazwa surowca]
 
-            String sql = "UPDATE surowce SET ilosc = ilosc + '"+dane[1]+"' WHERE nazwa = '" + dane[2] + "' AND Surowce_id_dostawcy = " + dane[0] + ";";
-            myStat.executeUpdate(sql);
-            sql = "INSERT INTO budzet (straty) VALUES("+dane[1]+"* (SELECT cena FROM dostawcy WHERE id_dostawcy = '"+dane[0]+"'))";
-            myStat.executeUpdate(sql);
+            String sql = "SELECT Surowce_id_dostawcy FROM surowce WHERE Surowce_id_dostawcy = '" + dane[0] + "';";
+            myRs = myStat.executeQuery(sql);
+            if(!myRs.next())
+            {
+                sql = "SELECT jednostka FROM surowce WHERE nazwa = '" + dane[2] + "' GROUP BY jednostka";
+                myRs = myStat.executeQuery(sql);
+                myRs.next();
+                String unit = myRs.getString("jednostka");
+                System.out.println("Dodano produkt od nowego dostawcy");
+                sql = "INSERT INTO surowce(nazwa, Surowce_id_dostawcy, ilosc, jednostka) " +
+                        "VALUE ('" + dane[2] + "', '" + dane[0] + "', '" + dane[1] + "', '" + unit + "')";
+                myStat.executeUpdate(sql);
+
+                sql = "INSERT INTO budzet (straty) VALUES("+dane[1]+"* (SELECT cena FROM dostawcy WHERE id_dostawcy = '"+dane[0]+"'))";
+                myStat.executeUpdate(sql);
+            }
+            else
+            {
+                sql = "UPDATE surowce SET ilosc = ilosc + '"+dane[1]+"' WHERE nazwa = '" + dane[2] + "' AND Surowce_id_dostawcy = " + dane[0] + ";";
+                myStat.executeUpdate(sql);
+                sql = "INSERT INTO budzet (straty) VALUES("+dane[1]+"* (SELECT cena FROM dostawcy WHERE id_dostawcy = '"+dane[0]+"'))";
+                myStat.executeUpdate(sql);
+            }
         }catch(SQLException e){
             e.printStackTrace();
         }

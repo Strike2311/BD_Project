@@ -53,40 +53,50 @@ public class PracownikController {
             try {
                 int column = 0;
                 int row = view_zmiana_sur.getSurowceTable().getSelectedRow();
-                String id_sur= view_zmiana_sur.getSurowceTable().getModel().getValueAt(row, column).toString();
-                column = 3;
-                String aktualna_ilosc = view_zmiana_sur.getSurowceTable().getModel().getValueAt(row, column).toString();
+                if(row == -1)
+                {
+                    JOptionPane.showMessageDialog(null,
+                            "Wybierz wiersz",
+                            "Błąd",
+                            JOptionPane.ERROR_MESSAGE);
+                }
+                else
+                {
+                    String id_sur= view_zmiana_sur.getSurowceTable().getModel().getValueAt(row, column).toString();
+                    column = 3;
+                    String aktualna_ilosc = view_zmiana_sur.getSurowceTable().getModel().getValueAt(row, column).toString();
 
-                String ilosc = view_zmiana_sur.getPobranaIloscTextField().getText();
-                String dane[] = {id_sur, ilosc};
+                    String ilosc = view_zmiana_sur.getPobranaIloscTextField().getText();
+                    String dane[] = {id_sur, ilosc};
 
+                    char c;
+                    int digitCount = 0;
 
-                char c;
-                int digitCount = 0;
-
-                for (int j = 0; j < ilosc.length(); j++) {
-                    c = ilosc.charAt(j);
-                    if (Character.isDigit(c)) {
-                        digitCount++;
+                    for (int j = 0; j < ilosc.length(); j++) {
+                        c = ilosc.charAt(j);
+                        if (Character.isDigit(c)) {
+                            digitCount++;
+                        }
                     }
-                }
-                if(digitCount != ilosc.length())
-                {
-                    JOptionPane.showMessageDialog(null,
-                            "Niepoprawne dane",
-                            "Błąd",
-                            JOptionPane.ERROR_MESSAGE);
-                }
-                else if(ilosc.length() == 0 || Integer.parseInt(ilosc) > Integer.parseInt(aktualna_ilosc))
-                {
-                    JOptionPane.showMessageDialog(null,
-                            "Niepoprawne dane",
-                            "Błąd",
-                            JOptionPane.ERROR_MESSAGE);
-                }
-                else{
-                    model.wprowadzenieZmianyStanuZasobow(model.getMyStat(), model.getMyRs(), dane);
-                    view_zmiana_sur.refresh(model.getMyStat(), model.getMyRs());
+
+                    if(digitCount != ilosc.length())
+                    {
+                        JOptionPane.showMessageDialog(null,
+                                "Niepoprawne dane",
+                                "Błąd",
+                                JOptionPane.ERROR_MESSAGE);
+                    }
+                    else if(ilosc.length() == 0 || (float)Integer.parseInt(ilosc) > Float.parseFloat(aktualna_ilosc))
+                    {
+                        JOptionPane.showMessageDialog(null,
+                                "Niepoprawne dane",
+                                "Błąd",
+                                JOptionPane.ERROR_MESSAGE);
+                    }
+                    else{
+                        model.wprowadzenieZmianyStanuZasobow(model.getMyStat(), model.getMyRs(), dane);
+                        view_zmiana_sur.refresh(model.getMyStat(), model.getMyRs());
+                    }
                 }
             }catch (SQLException x) {
                 JOptionPane.showMessageDialog(null, x.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
