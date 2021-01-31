@@ -39,9 +39,10 @@ public class LoginController {
                     return user;
                 break;
             case 1:
-                user = new PracownikModel(login,haslo);
-                if(user.getCzyZalogowany())
-                    return user;
+                //user = new PracownikModel(login,haslo);
+                new PracownikController(login, haslo);
+                //if(user.getCzyZalogowany())
+                    //return user;
                 break;
             case 2:
                 //user = new MenadzerModel(login,haslo);

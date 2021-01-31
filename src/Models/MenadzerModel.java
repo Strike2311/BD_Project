@@ -28,7 +28,7 @@ public class MenadzerModel extends LoginModel{
             if(myRs.next()) {
                 if(myRs.getString("uprawnienia").equals("Menadżer")) {
                     super.setCzyZalogowany(true);
-                    System.out.println("zalogowano");
+                    System.out.println("zalogowano menadżera");
                 }
                 else
                 {
@@ -94,7 +94,7 @@ public class MenadzerModel extends LoginModel{
         //tablica dane w formacie [imie, nazwisko, email]
        try {
 
-           String sql = "UPDATE pracownicy SET pracownik = 1 WHERE imie = '"+dane[0]+"' AND nazwisko = '"+ dane[1] +"' AND email='"+dane[2]+"'";
+           String sql = "UPDATE pracownicy SET pracownik = 1 WHERE id_pracownicy = '" + dane[0] + "'";
            myStat.executeUpdate(sql);
        }catch(SQLException e){
            e.printStackTrace();
@@ -104,7 +104,7 @@ public class MenadzerModel extends LoginModel{
     public void nadzorWynagrodzen(ResultSet myRs, Statement myStat, String dane[])throws SQLException{
         try {//dane format [imie,nazwisko,email,nowa stawka]
 
-            String sql = "UPDATE pracownicy SET stawka = '"+ dane[3]+"' WHERE imie = '"+dane[0]+"' AND nazwisko = '"+ dane[1] +"' AND email='"+dane[2]+"'";
+            String sql = "UPDATE pracownicy SET stawka = '"+ dane[1]+"' WHERE id_pracownicy = '"+dane[0]+"'";
             myStat.executeUpdate(sql);
         }catch(SQLException e){
             e.printStackTrace();
@@ -124,13 +124,13 @@ public class MenadzerModel extends LoginModel{
         }
 
     }
-    public void zamowienieSurowcow(ResultSet myRs, Statement myStat, String dane[])throws SQLException{
+    public void zamowienieSurowcow(Statement myStat, ResultSet myRs, String dane[])throws SQLException{
         try {//dane format [id_dostawcy, ilosc_zamowienia, nazwa surowca]
 
-            String sql = "UPDATE surowce SET ilosc = ilosc + '"+dane[1]+"' WHERE nazwa = '"+dane[2]+"'";
+            String sql = "UPDATE surowce SET ilosc = ilosc + '"+dane[1]+"' WHERE nazwa = '" + dane[2] + "' AND Surowce_id_dostawcy = " + dane[0] + ";";
             myStat.executeUpdate(sql);
-            //sql = "INSERT INTO budzet (straty) VALUES("+dane[1]+"* (SELECT cena FROM dostawcy WHERE id_dostawcy = '"+dane[0]+"'))";
-            //myStat.executeUpdate(sql);
+            sql = "INSERT INTO budzet (straty) VALUES("+dane[1]+"* (SELECT cena FROM dostawcy WHERE id_dostawcy = '"+dane[0]+"'))";
+            myStat.executeUpdate(sql);
         }catch(SQLException e){
             e.printStackTrace();
         }

@@ -4,6 +4,24 @@ import java.sql.*;
 
 public class PracownikModel extends LoginModel {
 
+    String jdbcsrc = "jdbc:mysql://localhost:3306/mydb";
+    String login = "root";
+    String password = "root1234";
+
+    Connection myCon;
+    Statement myStat;
+    ResultSet myRs;
+
+    private String imie;
+    private String nazwisko;
+    private String nr_telefonu;
+    private String uprawnienia;
+    private String czyZatwierdzony;
+    private String stawka;
+    private String email;
+    private String haslo;
+    private boolean czyZalogowany;
+
     public PracownikModel(String imie, String nazwisko, String nr_telefonu, String uprawnienia, String czyZatwierdzony, String stawka, String email, String haslo) {
         super(email, haslo);
         this.imie = imie;
@@ -16,42 +34,24 @@ public class PracownikModel extends LoginModel {
     }
 
 
-    private String imie;
-    private String nazwisko;
-    private String nr_telefonu;
-    private String uprawnienia;
-    private String czyZatwierdzony;
-    private String stawka;
-    private String email;
-    private String haslo;
-    private boolean czyZalogowany;
-
-
     public PracownikModel(String email, String haslo) {
         super(email, haslo);
-        String jdbcsrc = "jdbc:mysql://localhost:3306/mydb";
-        String login = "root";
-        String password = "root1234";
+
         try {
-            Connection myCon = DriverManager.getConnection(jdbcsrc, login, password);
-            Statement myStat_tmp = myCon.createStatement();
-
-            ResultSet myRs_tmp;
-            //Zmiana statusu zamówianie na reklamacje
-
-
+            myCon = DriverManager.getConnection(jdbcsrc, login, password);
+            myStat = myCon.createStatement();
 
             String sql = "SELECT imie, nazwisko, nr_telefonu, uprawnienia, pracownik, stawka FROM pracownicy WHERE email = '"+email+"' AND haslo = '"+haslo+"'";
-            myRs_tmp = myStat_tmp.executeQuery(sql);
-            if(myRs_tmp.next()) {
-                if(!(myRs_tmp.getString("uprawnienia").equals("Menadżer")) && (myRs_tmp.getInt("pracownik") == 1)) {
+            myRs = myStat.executeQuery(sql);
+            if(myRs.next()) {
+                if(!(myRs.getString("uprawnienia").equals("Menadżer")) && (myRs.getInt("pracownik") == 1)) {
 
-                    this.imie = myRs_tmp.getString("imie");
-                    this.nazwisko = myRs_tmp.getString("nazwisko");
-                    this.nr_telefonu = myRs_tmp.getString("nr_telefonu");
-                    this.uprawnienia = myRs_tmp.getString("uprawnienia");
-                    this.czyZatwierdzony = myRs_tmp.getString("pracownik");
-                    this.stawka = myRs_tmp.getString("stawka");
+                    this.imie = myRs.getString("imie");
+                    this.nazwisko = myRs.getString("nazwisko");
+                    this.nr_telefonu = myRs.getString("nr_telefonu");
+                    this.uprawnienia = myRs.getString("uprawnienia");
+                    this.czyZatwierdzony = myRs.getString("pracownik");
+                    this.stawka = myRs.getString("stawka");
                     super.setCzyZalogowany(true);
                 }
                 else super.setCzyZalogowany(false);

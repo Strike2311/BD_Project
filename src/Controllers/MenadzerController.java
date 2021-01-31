@@ -2,7 +2,6 @@ package Controllers;
 
 import Models.MenadzerModel;
 import Views.*;
-
 import javax.swing.*;
 import java.sql.SQLException;
 
@@ -31,6 +30,95 @@ public class MenadzerController {
     public void init(){
         view.getDostawcyButton().addActionListener(e -> showDostawcy());
         view.getBudzetButton().addActionListener(e -> showBudzet());
+        view.getSurowceButton().addActionListener(e -> showSurowce());
+        view.getPracownicyButton().addActionListener(e -> showPracownicy());
+    }
+
+    private void showPracownicy() {
+
+        NadajUprawnieniaView view_prac = new NadajUprawnieniaView(model.getMyStat(), model.getMyRs());
+        view_prac.getAcceptButton().addActionListener(e -> {
+            try
+            {
+                int column = 0;
+                int row = view_prac.getNiezatwoerdzeniPracownicyTable().getSelectedRow();
+                String dane[] = {view_prac.getNiezatwoerdzeniPracownicyTable().getModel().getValueAt(row, column).toString()};
+                int index = Integer.parseInt(view_prac.getNiezatwoerdzeniPracownicyTable().getModel().getValueAt(row, column).toString());
+                if(index != 0)
+                {
+                    model.nadanieUprawnien(model.getMyRs(), model.getMyStat(), dane);
+                    view_prac.refresh_zatwierdzonych(model.getMyStat(), model.getMyRs());
+                    view_prac.refresh_niezatwierdzonych(model.getMyStat(), model.getMyRs());
+                }
+            }catch (SQLException x) {
+                JOptionPane.showMessageDialog(null, x.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                x.printStackTrace();
+            }
+        });
+        view_prac.getStawkaButton().addActionListener(e -> {
+            try
+            {
+                int column = 0;
+                int row = view_prac.getZatwierdzeniPracownicyTable().getSelectedRow();
+
+                String stawka = view_prac.getStawkaTextField().getText();
+                String dane[] = {view_prac.getZatwierdzeniPracownicyTable().getModel().getValueAt(row, column).toString(), stawka};
+                int index = Integer.parseInt(view_prac.getZatwierdzeniPracownicyTable().getModel().getValueAt(row, column).toString());
+                    System.out.println(index);
+                    if(index != 0)
+                    {
+                        model.nadzorWynagrodzen(model.getMyRs(), model.getMyStat(), dane);
+                        view_prac.refresh_zatwierdzonych(model.getMyStat(), model.getMyRs());
+                        view_prac.refresh_niezatwierdzonych(model.getMyStat(), model.getMyRs());
+                    }
+            }catch (SQLException x) {
+                JOptionPane.showMessageDialog(null, x.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                x.printStackTrace();
+            }
+        });
+        view_prac.getWsteczButton().addActionListener(e -> {
+            //TODO
+        });
+    }
+
+    private void showSurowce() {
+
+        SurowceView view_surowce = new SurowceView(model.getMyStat(), model.getMyRs());
+        view_surowce.getZamowButton().addActionListener(e ->
+        {
+            int column = 1;
+            int row = view_surowce.getDostawcyTable().getSelectedRow();
+            String nazwa = view_surowce.getDostawcyTable().getModel().getValueAt(row, column).toString();
+            if (nazwa != null) {
+
+                ZamowSurowiecView zamawianie_surowcow_view = new ZamowSurowiecView(model.getMyStat(), model.getMyRs(), nazwa);
+                zamawianie_surowcow_view.getZmowButton().addActionListener(e1 -> {
+                    try {
+                        int column2 = 0;
+                        int row2 = zamawianie_surowcow_view.getDostawcyTable().getSelectedRow();
+                        int value = Integer.parseInt(zamawianie_surowcow_view.getDostawcyTable().getModel().getValueAt(row2, column2).toString());
+                        int ilosc = Integer.parseInt(zamawianie_surowcow_view.getIloscTextField().getText());
+                        String dane[] = {"" + value, "" + ilosc, nazwa};
+                        model.zamowienieSurowcow(model.getMyStat(), model.getMyRs(), dane);
+                        view_surowce.refresh(model.getMyStat(), model.getMyRs());
+                        JOptionPane.showMessageDialog(null,
+                                "Poprawnie dodano surowce");
+                    }catch (SQLException x) {
+                        JOptionPane.showMessageDialog(null, x.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                        x.printStackTrace();
+                    }
+                });
+                zamawianie_surowcow_view.getWsteczButton().addActionListener(e1 ->
+                {
+                    //TODO
+                });
+
+            }
+        });
+        view_surowce.getWsteczButton().addActionListener(e ->
+        {
+            //TODO
+        });
     }
 
     private void showBudzet(){
@@ -59,6 +147,8 @@ public class MenadzerController {
                         view_dadaj_dostawce.getOdlegloscTextField().getText()};
                     model.dodajDostawce(model.getMyStat(), dane);
                     view_dostawcy.refresh(model.getMyStat(), model.getMyRs());
+                    JOptionPane.showMessageDialog(null,
+                            "Dodano dostawcę");
                 } catch (SQLException x) {
                 JOptionPane.showMessageDialog(null, x.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
                 x.printStackTrace();

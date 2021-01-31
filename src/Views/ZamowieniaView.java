@@ -9,11 +9,9 @@ import java.awt.*;
 import java.sql.*;
 import java.sql.SQLException;
 
-public class ZamowieniaView extends JDialog{
+public class ZamowieniaView extends JFrame{
 
-    static final String USERNAME = "root";
-    static final String PASSWORD = "root1234";
-    static final String CONN_STRING = "jdbc:mysql://localhost:3306/mydb";
+
     private JPanel mainPanel;
     private JPanel headPanel;
     private JLabel headLabel;
@@ -22,9 +20,16 @@ public class ZamowieniaView extends JDialog{
     private JButton closeButton;
     private JScrollPane scrollPaneTab;
     String[] columnNames = {"ID zamowienia", "ID klienta", "Data zamowienia"};
-    private DefaultTableModel tableModel = new DefaultTableModel(columnNames, 0);
+    private DefaultTableModel tableModel = new DefaultTableModel(columnNames, 0)
+    {
+        @Override
+        public boolean isCellEditable(int row, int column) {
+            //all cells false
+            return false;
+        }
+    };
 
-    public ZamowieniaView() {
+    public ZamowieniaView(Statement st, ResultSet rs) {
 
         setSize(400, 500);
         setTitle("Zamowienia");
@@ -36,17 +41,15 @@ public class ZamowieniaView extends JDialog{
 
 
         try {
-            Connection myCon = DriverManager.getConnection(CONN_STRING,USERNAME,PASSWORD);
-            Statement myStat = myCon.createStatement();
+
             String query = "SELECT idZamowienia, Klienci_id_klienci, data_zamowienia FROM zamowienia";
-            ResultSet myRs = myStat.executeQuery(query);
-            tableModel.setColumnIdentifiers(new String[]{"ID zamowienia", "ID klienta", "Data zamowienia"});
+            rs = st.executeQuery(query);
 
-            while (myRs.next()) {
+            while (rs.next()) {
 
-                String idZam = myRs.getString("idZamowienia");
-                String idKlient = myRs.getString("Klienci_id_klienci");
-                String dateZam = myRs.getString("data_zamowienia");
+                String idZam = rs.getString("idZamowienia");
+                String idKlient = rs.getString("Klienci_id_klienci");
+                String dateZam = rs.getString("data_zamowienia");
 
                 String[] data = { idZam, idKlient, dateZam };
                 tableModel.addRow(data);
@@ -58,7 +61,6 @@ public class ZamowieniaView extends JDialog{
         }
 
         zamowieniaTable.setModel(tableModel);
-        zamowieniaTable.setPreferredScrollableViewportSize(new Dimension(400, 100));
         setResizable(false);
         zamowieniaTable.setFillsViewportHeight(true);
         zamowieniaTable.getTableHeader().setReorderingAllowed(false);
