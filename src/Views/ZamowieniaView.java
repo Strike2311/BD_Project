@@ -1,10 +1,7 @@
 package Views;
 
 import javax.swing.*;
-import javax.swing.table.DefaultTableColumnModel;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.JTableHeader;
-import javax.swing.table.TableColumnModel;
 import java.awt.*;
 import java.sql.*;
 import java.sql.SQLException;
@@ -17,7 +14,7 @@ public class ZamowieniaView extends JFrame{
     private JLabel headLabel;
     private JTable zamowieniaTable;
     private JButton nadajButton;
-    private JButton closeButton;
+    private JButton cofnijButton;
     private JScrollPane scrollPaneTab;
     String[] columnNames = {"ID zamowienia", "ID klienta", "Data zamowienia"};
     private DefaultTableModel tableModel = new DefaultTableModel(columnNames, 0)
@@ -35,7 +32,7 @@ public class ZamowieniaView extends JFrame{
         setTitle("Zamowienia");
         setContentPane(mainPanel);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        getRootPane().setDefaultButton(closeButton);
+        getRootPane().setDefaultButton(cofnijButton);
         setLocationRelativeTo(null);
 
 
@@ -87,10 +84,10 @@ public class ZamowieniaView extends JFrame{
     }
 
     public JButton getCloseButton() {
-        return closeButton;
+        return cofnijButton;
     }
 
     public void setCloseButton(JButton closeButton) {
-        this.closeButton = closeButton;
+        this.cofnijButton = closeButton;
     }
 }

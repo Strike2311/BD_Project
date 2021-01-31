@@ -6,4 +6,5 @@ public class RejestracjaGodzinPracyView {
     private JLabel iloscGodzinLabel;
     private JTextField iloscGodzinTextField;
     private JButton zatwierdzButton;
+    private JButton cofnijButton;
 }

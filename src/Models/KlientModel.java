@@ -18,6 +18,12 @@ public class KlientModel extends LoginModel {
    // private boolean czyZalogowany;
 
 
+    String jdbcsrc = "jdbc:mysql://localhost:3306/mydb";
+    String login = "root";
+    String password = "root1234";
+    Connection myCon;
+    Statement myStat;
+    ResultSet myRs;
 
 
     public KlientModel(String imie, String nazwisko, String nr_telefonu, String miasto, String adres, String email, String haslo) {
@@ -31,12 +37,9 @@ public class KlientModel extends LoginModel {
     }
     public KlientModel(String email, String haslo) {
         super(email, haslo);
-        String jdbcsrc = "jdbc:mysql://localhost:3306/mydb";
-        String login = "root";
-        String password = "root1234";
         try {
-            Connection myCon = DriverManager.getConnection(jdbcsrc, login, password);
-            Statement myStat_tmp = myCon.createStatement();
+            myCon = DriverManager.getConnection(jdbcsrc, login, password);
+            myStat = myCon.createStatement();
 
         ResultSet myRs_tmp;
         //Zmiana statusu zamówianie na reklamacje
@@ -44,7 +47,7 @@ public class KlientModel extends LoginModel {
 
 
             String sql = "SELECT imie, nazwisko, nr_telefonul, miasto, adres FROM klienci WHERE email = '"+email+"' AND haslo = '"+haslo+"'";
-        myRs_tmp = myStat_tmp.executeQuery(sql);
+        myRs_tmp = myStat.executeQuery(sql);
         if(myRs_tmp.next()) {
             this.imie = myRs_tmp.getString("imie");
             this.nazwisko = myRs_tmp.getString("nazwisko");
@@ -99,13 +102,38 @@ public class KlientModel extends LoginModel {
         this.adres = adres;
     }
 
+    public Connection getMyCon() {
+        return myCon;
+    }
+
+    public void setMyCon(Connection myCon) {
+        this.myCon = myCon;
+    }
+
+    public Statement getMyStat() {
+        return myStat;
+    }
+
+    public void setMyStat(Statement myStat) {
+        this.myStat = myStat;
+    }
+
+    public ResultSet getMyRs() {
+        return myRs;
+    }
+
+    public void setMyRs(ResultSet myRs) {
+        this.myRs = myRs;
+    }
+
     public void zamowienieDostawy(ResultSet myRs, Statement myStat, ArrayList<String> dane) throws SQLException {
         //struktura danych [idPartii, cena, ilosc...]
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         LocalDateTime now = LocalDateTime.now();
         try {
             String sql = "INSERT INTO zamowienia (Klienci_id_klienci, data_zamowienia, status) " +
-                    "VALUES(CALL GetIdKlienta('" + this.imie + "','" + this.nazwisko + "','" + super.getEmail() + "'), '" + dtf.format(now) + "','przygotowane do nadania') ";
+                    "VALUES((SELECT id_klienci FROM klienci WHERE email = '"+super.getEmail() + "' ORDER BY id_klienci DESC LIMIT 1)" +
+                    ", '" + dtf.format(now) + "','przygotowane do nadania') ";
             myStat.executeUpdate(sql);
 
             sql = "SELECT * FROM zamowienia ORDER BY idZamowienia DESC LIMIT 1";
@@ -117,8 +145,11 @@ public class KlientModel extends LoginModel {
                 sql = "INSERT INTO patriejednegozamowienia (Zamowienia_idZamowienia, Partia_id_partii, ilosc) " +
                         "VALUE(" + idZamowienia + ", " + dane.get(i) + "," + dane.get(i + 2) + ") ";
                 myStat.executeUpdate(sql);
+                float sum = Float.parseFloat(dane.get(i + 1)) * Float.parseFloat(dane.get(i+2));
+
+
                 sql = "INSERT INTO budzet (zyski) " +
-                        "VALUE(" + dane.get(i + 1) + ") ";
+                        "VALUE(" + sum + ") ";
                 myStat.executeUpdate(sql);
             }
         } catch (SQLException throwables) {

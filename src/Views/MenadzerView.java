@@ -9,6 +9,7 @@ public class MenadzerView extends JFrame{
     private JButton pracownicyButton;
     private JButton surowceButton;
     private JPanel MainPanel;
+    private JButton wylogujButton;
 
     public MenadzerView()
     {

@@ -30,7 +30,9 @@ public class LoginView {
         frame.setVisible(true);
         //frame.getRootPane().setDefaultButton(buttonZaloguj);
     }
-
+    public void setIsVisible(boolean isVisible){
+        frame.setVisible(isVisible);
+    }
     public JComboBox getLoggingOptionCB() {
         return loggingOptionCB;
     }

@@ -1,9 +1,6 @@
 package Models;
 
 import Controllers.LoginController;
-import Views.BudzetView;
-import Views.LoginView;
-import Views.ZamowieniaView;
 
 import java.sql.*;
 
@@ -29,6 +26,7 @@ public class Aplikacja {
             c.printStackTrace();
         }
     }
+
 /*
         //Wypisywanie ResultSet jak stringa
         while(myRs.next()){
@@ -95,7 +93,7 @@ public class Aplikacja {
        // MenadzerModel model = new MenadzerModel();
         String []dane = {"6", "2","Inne Przyprawy"};
       // model.wyswietlDostawcow(myRs,myStat, "Ziemniaki");
-           LoginModel currUser = logowanie("kozey.sven@example.net","pyon1111", 2);
+         //  LoginModel currUser = logowanie("kozey.sven@example.net","pyon1111", 2);
             if(currUser == null)
                 System.out.println("błąd logowania");
             else
@@ -103,8 +101,8 @@ public class Aplikacja {
         } catch (SQLException c) {
             c.printStackTrace();
         }
-*/
 
+*/
         //LoginModel l = new LoginModel();
         //testSQL();
         LoginController l = new LoginController();

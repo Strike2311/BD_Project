@@ -122,6 +122,7 @@ public class MenadzerController {
     }
 
     private void showBudzet(){
+        view.setVisible(false);
         try{
             float roznica = model.podgladBudzetu(model.getMyStat(), model.getMyRs());
             new BudzetView(roznica);
@@ -129,10 +130,11 @@ public class MenadzerController {
         JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         e.printStackTrace();
         }
+
     }
 
     private void showDostawcy() {
-
+        view.setVisible(false);
         DostawcyView view_dostawcy = new DostawcyView(model.getMyStat(), model.getMyRs());
         view_dostawcy.getAddButton().addActionListener(e ->
         {
@@ -156,7 +158,9 @@ public class MenadzerController {
             });
             view_dadaj_dostawce.getCloseButton().addActionListener(e1 ->
                     {
-                        //TODO zamykanie okna
+                        view_dadaj_dostawce.setVisible(false);
+                        view_dostawcy.setVisible(true);
+
                     }
             );
         });
@@ -177,7 +181,8 @@ public class MenadzerController {
         });
         view_dostawcy.getCloseButton().addActionListener(e ->
         {
-            //TODO Cofanie
+            view_dostawcy.setVisible(false);
+            view.setVisible(true);
         });
     }
 }

@@ -20,6 +20,9 @@ public class BudzetView extends JDialog{
     private JScrollPane scrlPane2;
     private JTable stratyTable;
     private JTable zyskiTable;
+    private JButton cofnijButton;
+    //private DefaultTableModel tableModel1 = new DefaultTableModel(columnNames1, 0);
+    //private DefaultTableModel tableModel2 = new DefaultTableModel(columnNames2, 0);
     private DefaultTableModel tableModel1 = new DefaultTableModel(columnNames1, 0)
     {
 
