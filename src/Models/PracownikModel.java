@@ -64,8 +64,9 @@ public class PracownikModel extends LoginModel {
     }
 
     public void nadawanieZamowien(ResultSet myRs, Statement myStat, String id) throws SQLException{
+
         try {
-            String sql = "CALL ZmienStatusZamowienia('nadane','" + id + "', current_date())";//, '-%Y%m%d')
+            String sql = "CALL ZmienStatusZamowienia('nadane','" + id + "', current_date())";
             myStat.executeUpdate(sql);
         }catch(SQLException e){
             e.printStackTrace();
@@ -74,17 +75,7 @@ public class PracownikModel extends LoginModel {
     public void rejestracjaGodzinPracy(ResultSet myRs, Statement myStat, String hrs, String id_pracownika) throws SQLException{
         try {
             String sql = " CALL RejestracjaGodzin('"+ hrs +"', '" + id_pracownika + "');";
-                   // "(SELECT id_pracownicy FROM pracownicy WHERE imie = '"+this.imie+"' AND nazwisko = '"+this.nazwisko+"' AND email = '"+this.email+"' ORDER BY id_pracownicy DESC LIMIT 1)) ";
             myStat.executeUpdate(sql);
-            //sql = "CALL GetStawkaPracownika('"+this.imie+"', '"+this.nazwisko+"', '"+this.email+"')";
-
-            //myRs = myStat.executeQuery(sql);
-            //myRs.next();
-            //int wyplata = myRs.getInt("stawka");
-            //wyplata *= Integer.parseInt(hrs);
-
-            //sql = "INSERT INTO budzet (straty) VALUE('"+wyplata+"')";
-            //myStat.executeUpdate(sql);
         }catch(SQLException e){
             e.printStackTrace();
         }

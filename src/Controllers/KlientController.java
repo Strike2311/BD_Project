@@ -94,21 +94,30 @@ public class KlientController {
             view_zamow_towar.getZamówButton().addActionListener(e ->{
                 try {
                     int row = view_zamow_towar.getTabelaZamowTowary().getSelectedRow();
-                    if(!view_zamow_towar.getTableModel().getValueAt(row, 5).toString().equals("niedostępna")) {
-                        ArrayList<String> dane = new ArrayList<String>();
-                        dane.add(view_zamow_towar.getTableModel().getValueAt(row, 0).toString());
-                        dane.add(view_zamow_towar.getTableModel().getValueAt(row, 4).toString());
-                        dane.add(view_zamow_towar.getIloscTextField().getText());
+                    if(row != -1) {
+                        if (!view_zamow_towar.getTableModel().getValueAt(row, 5).toString().equals("niedostępna")) {
+                            ArrayList<String> dane = new ArrayList<String>();
+                            dane.add(view_zamow_towar.getTableModel().getValueAt(row, 0).toString());
+                            dane.add(view_zamow_towar.getTableModel().getValueAt(row, 4).toString());
+                            dane.add(view_zamow_towar.getIloscTextField().getText());
 
+                            if(sprawdzeniePoprawnosciDanychZamowienie(view_zamow_towar.getIloscTextField().getText())) {
+                                model.zamowienieDostawy(model.getMyRs(), model.getMyStat(), dane);
+                                JOptionPane.showMessageDialog(null, "Poprawnie zakupiłeś produkt " + view_zamow_towar.getTableModel().getValueAt(row, 1).toString() + " w ilości: " +
+                                        Integer.parseInt(view_zamow_towar.getIloscTextField().getText()) * Integer.parseInt(view_zamow_towar.getTableModel().getValueAt(row, 3).toString())
+                                        + " paczek.", "Zakup", JOptionPane.INFORMATION_MESSAGE);
+                            }
+                            else{
+                                JOptionPane.showMessageDialog(null, "Błąd wprowadzania danych.", "Zakup", JOptionPane.ERROR_MESSAGE);
 
-                        model.zamowienieDostawy(model.getMyRs(), model.getMyStat(), dane);
-                        JOptionPane.showMessageDialog(null, "Poprawnie zakupiłeś produkt "+view_zamow_towar.getTableModel().getValueAt(row, 1).toString()+" w ilości: "+
-                                Integer.parseInt(view_zamow_towar.getIloscTextField().getText()) * Integer.parseInt(view_zamow_towar.getTableModel().getValueAt(row, 3).toString())
-                                +" paczek.", "Zakup", JOptionPane.INFORMATION_MESSAGE);
+                            }
+                        } else
+                            JOptionPane.showMessageDialog(null, "Wybrany produkt nie jest dostępny.", "Zakup", JOptionPane.ERROR_MESSAGE);
                     }
-                    else
-                        JOptionPane.showMessageDialog(null, "Wybrany produkt nie jest dostępny.", "Zakup", JOptionPane.ERROR_MESSAGE);
+                    else{
+                        JOptionPane.showMessageDialog(null, "Należy wybrać wiersz z tabeli.", "Zakup", JOptionPane.ERROR_MESSAGE);
 
+                    }
                 }catch(SQLException e1){
 
                 }
@@ -119,5 +128,17 @@ public class KlientController {
         }
         view.setIsVisible(false);
 
+    }
+    public boolean sprawdzeniePoprawnosciDanychZamowienie(String s){
+        if (s.length()>0 && s.length()<10){
+        for(int i=0; i<s.length(); i++){
+            char c = s.charAt(i);
+            if(!Character.isDigit(c)){
+                return false;
+            }
+        }
+        return true;
+        }
+        return false;
     }
 }
