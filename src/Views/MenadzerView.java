@@ -55,4 +55,11 @@ public class MenadzerView extends JFrame{
         this.surowceButton = surowceButton;
     }
 
+    public JButton getWylogujButton() {
+        return wylogujButton;
+    }
+
+    public void setWylogujButton(JButton wylogujButton) {
+        this.wylogujButton = wylogujButton;
+    }
 }

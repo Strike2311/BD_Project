@@ -2,6 +2,7 @@ package Controllers;
 
 import Models.KlientModel;
 import Views.KlientHomeView;
+import Views.LoginView;
 import Views.ZamówTowarView;
 import Views.ZarzadzajZamowieniamiView;
 
@@ -12,10 +13,10 @@ import java.util.ArrayList;
 public class KlientController {
     private KlientHomeView view;
     private KlientModel model;
+    private LoginView view_of_logging;
 
-
-    public KlientController(String email, String haslo)
-    {
+    public KlientController(String email, String haslo, LoginView view_of_logging)
+    {this.view_of_logging = view_of_logging;
         model = new KlientModel(email, haslo);
         if(model.getCzyZalogowany())
         {
@@ -44,6 +45,12 @@ public class KlientController {
           } catch (SQLException throwables) {
               throwables.printStackTrace();
           }
+      });
+      view.getWylogujButton().addActionListener(e ->{
+          view.setVisible(false);
+          view_of_logging.getPasswordField().setText("");
+          view_of_logging.getTextField1().setText("");
+          view_of_logging.setIsVisible(true);
       });
 
     }
@@ -88,7 +95,7 @@ public class KlientController {
             view_zamow_towar.getZamówButton().addActionListener(e ->{
                 try {
                     int row = view_zamow_towar.getTabelaZamowTowary().getSelectedRow();
-                    if(view_zamow_towar.getTableModel().getValueAt(row, 2).toString() != "niedostępna") {
+                    if(!view_zamow_towar.getTableModel().getValueAt(row, 2).toString().equals("niedostępna")) {
                         ArrayList<String> dane = new ArrayList<String>();
                         dane.add(view_zamow_towar.getTableModel().getValueAt(row, 0).toString());
                         dane.add(view_zamow_towar.getTableModel().getValueAt(row, 1).toString());

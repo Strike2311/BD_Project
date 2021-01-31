@@ -167,17 +167,17 @@ public class LoginController {
         switch (userType) {
             case 0:
 
-                new KlientController(login,haslo);
+                new KlientController(login,haslo, view_of_logging);
                 view_of_logging.setIsVisible(false);
                 break;
             case 1:
 
-                new PracownikController(login,haslo);
+                new PracownikController(login,haslo,view_of_logging);
                 view_of_logging.setIsVisible(false);
 
                 break;
             case 2:
-                new MenadzerController(login, haslo);
+                new MenadzerController(login, haslo,view_of_logging);
                 view_of_logging.setIsVisible(false);
                 break;
             default:

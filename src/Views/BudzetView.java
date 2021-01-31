@@ -116,7 +116,14 @@ public class BudzetView extends JDialog{
         this.bilansTF = bilansTF;
     }
 
-    /*
+    public JButton getCofnijButton() {
+        return cofnijButton;
+    }
+
+    public void setCofnijButton(JButton cofnijButton) {
+        this.cofnijButton = cofnijButton;
+    }
+/*
     public void dispose() {
         dispose();
     }

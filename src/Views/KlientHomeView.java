@@ -41,6 +41,11 @@ public class KlientHomeView extends JFrame{
         this.zarządzajZamówieniamiButton = zarządzajZamówieniamiButton;
     }
 
+    public JButton getWylogujButton() {
+        return wylogujButton;
+    }
 
-
+    public void setWylogujButton(JButton wylogujButton) {
+        this.wylogujButton = wylogujButton;
+    }
 }
