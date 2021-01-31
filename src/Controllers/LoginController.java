@@ -41,7 +41,183 @@ public class LoginController {
         view_of_logging.getButtonZaloguj().addActionListener(e -> logowanie());
         view_of_logging.getSignUpButton().addActionListener(e -> rejestracjaWyborUzytkownika());
     }
+    private boolean sprawdzenieDanychRejestracjiKlienta(String [] dane){
+        for(int i=0; i<7; i++){
+            if(i==0 || i ==1 || i==3) {//imie nazwisko i miasto
+                if(dane[i].length()>=2 && dane[i].length()<45) {
+                    for (int j = 0; j < dane[i].length(); j++) {
+                       char c = dane[i].charAt(j);
+                       if(!Character.isLetter(c)) {
+                           JOptionPane.showMessageDialog(null, "Imie, nazwisko oraz miasto nie mogą zawierać cyfr.", "Błąd rejestracji", JOptionPane.ERROR_MESSAGE);
+                           return false;
+                       }
+                    }
+                }
+                else
+                    JOptionPane.showMessageDialog(null, "Imie, nazwisko oraz miasto powinny mieć od 2 do 44 znaków.", "Błąd rejestracji", JOptionPane.ERROR_MESSAGE);
+            }
+            else if(i == 2){//numer telefonu
+                if(dane[i].length()>=6 && dane[i].length()<45) {
+                    for(int j=0; j<dane[i].length(); j++){
+                        char c = dane[i].charAt(j);
+                        if(!(Character.isDigit(c) || c == '.' || c == 'x' || c == '-' || c == '(' || c == ')' || c == '+')){
+                            JOptionPane.showMessageDialog(null, "Niepoprawny format numeru telefonu.", "Błąd rejestracji", JOptionPane.ERROR_MESSAGE);
+                            return false;
+                        }
+                    }
+                }
+                else {
+                    JOptionPane.showMessageDialog(null, "Numer telefonu powinien mieć od 6 do 44 znaków.", "Błąd rejestracji", JOptionPane.ERROR_MESSAGE);
 
+                }
+
+
+
+            }
+            else if(i == 5){//email
+                if(dane[i].length()>=9&& dane[i].length()<45) {
+                    int tmp = 0;
+                    for(int j=0; j<dane[i].length(); j++) {
+                        char c = dane[i].charAt(j);
+                        if(c == '@'){
+                            tmp = 1;
+                        }
+                        if(tmp == 1 && c == '.'){
+                            tmp = 2;
+                        }
+                    }
+                    if(tmp != 2){
+                        JOptionPane.showMessageDialog(null, "Niepoprawny format adresu email.", "Błąd rejestracji", JOptionPane.ERROR_MESSAGE);
+                        return false;
+                    }
+
+                }
+                else{
+                    JOptionPane.showMessageDialog(null, "Adres e-mail może mieć od 9 do 44 znaków.", "Błąd rejestracji", JOptionPane.ERROR_MESSAGE);
+                    return false;
+                }
+
+
+            }
+            else if(i==4){//adres
+                if(!(dane[i].length()>=3&& dane[i].length()<45)){
+                    JOptionPane.showMessageDialog(null, "Adres zamieszkania może mieć od 3 do 44 znaków.", "Błąd rejestracji", JOptionPane.ERROR_MESSAGE);
+                    return false;
+                }
+
+            }
+            else if(i == 6){
+                char c;
+                int digitCount = 0;
+                int letterCount = 0;
+                for (int j = 0; j < dane[i].length(); j++) {
+                    c = dane[i].charAt(j);
+                    if (!Character.isLetterOrDigit(c)) {
+                        return false;
+                    }
+                    else if (Character.isDigit(c)) {
+                        digitCount++;
+
+                    }
+                    else if (Character.isLetter(c)) {
+                        letterCount++;
+
+                    }
+
+                }
+                if (digitCount < 1 || letterCount < 1){
+                    JOptionPane.showMessageDialog(null, "Błędny format hasła.", "Błąd rejestracji", JOptionPane.ERROR_MESSAGE);
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+    private boolean sprawdzenieDanychRejestracjiPracownika(String [] dane){
+        for(int i=0; i<5; i++){
+            if(i==0 || i ==1 ) {//imie nazwisko
+                if(dane[i].length()>=2 && dane[i].length()<45) {
+                    for (int j = 0; j < dane[i].length(); j++) {
+                        char c = dane[i].charAt(j);
+                        if(!Character.isLetter(c)) {
+                            JOptionPane.showMessageDialog(null, "Imie oraz nazwisko nie mogą zawierać cyfr ani znaków specjalnych.", "Błąd rejestracji", JOptionPane.ERROR_MESSAGE);
+                            return false;
+                        }
+                    }
+                }
+                else
+                    JOptionPane.showMessageDialog(null, "Imie, nazwisko oraz miasto powinny mieć od 2 do 44 znaków.", "Błąd rejestracji", JOptionPane.ERROR_MESSAGE);
+            }
+            else if(i == 2){//numer telefonu
+                if(dane[i].length()>=6 && dane[i].length()<45) {
+                    for(int j=0; j<dane[i].length(); j++){
+                        char c = dane[i].charAt(j);
+                        if(!(Character.isDigit(c) || c == '.' || c == 'x' || c == '-' || c == '(' || c == ')' || c == '+')){
+                            JOptionPane.showMessageDialog(null, "Niepoprawny format numeru telefonu.", "Błąd rejestracji", JOptionPane.ERROR_MESSAGE);
+                            return false;
+                        }
+                    }
+                }
+                else {
+                    JOptionPane.showMessageDialog(null, "Numer telefonu powinien mieć od 6 do 44 znaków.", "Błąd rejestracji", JOptionPane.ERROR_MESSAGE);
+
+                }
+
+
+
+            }
+            else if(i == 3){//email
+                if(dane[i].length()>=9&& dane[i].length()<45) {
+                    int tmp = 0;
+                    for(int j=0; j<dane[i].length(); j++) {
+                        char c = dane[i].charAt(j);
+                        if(c == '@'){
+                            tmp = 1;
+                        }
+                        if(tmp == 1 && c == '.'){
+                            tmp = 2;
+                        }
+                    }
+                    if(tmp != 2){
+                        JOptionPane.showMessageDialog(null, "Niepoprawny format adresu email.", "Błąd rejestracji", JOptionPane.ERROR_MESSAGE);
+                        return false;
+                    }
+
+                }
+                else{
+                    JOptionPane.showMessageDialog(null, "Adres e-mail może mieć od 9 do 44 znaków.", "Błąd rejestracji", JOptionPane.ERROR_MESSAGE);
+                    return false;
+                }
+
+
+            }
+            else if(i == 4){
+                char c;
+                int digitCount = 0;
+                int letterCount = 0;
+                for (int j = 0; j < dane[i].length(); j++) {
+                    c = dane[i].charAt(j);
+                    if (!Character.isLetterOrDigit(c)) {
+                        return false;
+                    }
+                    else if (Character.isDigit(c)) {
+                        digitCount++;
+
+                    }
+                    else if (Character.isLetter(c)) {
+                        letterCount++;
+
+                    }
+
+                }
+                if (digitCount < 1 || letterCount < 1){
+                    JOptionPane.showMessageDialog(null, "Błędny format hasła.", "Błąd rejestracji", JOptionPane.ERROR_MESSAGE);
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
     private void rejestracjaWyborUzytkownika() {
         view_of_logging.setIsVisible(false);
         RejestracjaWybórView view_of_rejestracja = new RejestracjaWybórView();
@@ -59,35 +235,37 @@ public class LoginController {
                     new String(view_of_rejestracja_klient.getHasloPasswordField().getPassword())
             };
 
-            try{
-                String sql = "SELECT * FROM klienci WHERE email = '"+dane[5]+"'";
-                myRs = myStat.executeQuery(sql);
-                if(!myRs.next()) {
+            if(sprawdzenieDanychRejestracjiKlienta(dane)) {
+                try {
+                    String sql = "SELECT * FROM klienci WHERE email = '" + dane[5] + "'";
+                    myRs = myStat.executeQuery(sql);
+                    if (!myRs.next()) {
 
-                    sql = "INSERT INTO klienci (imie, nazwisko, nr_telefonul,miasto,adres, email, haslo) VALUES ('" + dane[0] + "', '" + dane[1] + "'," +
-                            "'" + dane[2] + "', '" + dane[3] + "', '" + dane[4] + "', '" + dane[5] + "','" + dane[6] + "')";
+                        sql = "INSERT INTO klienci (imie, nazwisko, nr_telefonul,miasto,adres, email, haslo) VALUES ('" + dane[0] + "', '" + dane[1] + "'," +
+                                "'" + dane[2] + "', '" + dane[3] + "', '" + dane[4] + "', '" + dane[5] + "','" + dane[6] + "')";
 
-                    myStat.executeUpdate(sql);
+                        myStat.executeUpdate(sql);
 
-                    myRs = myStat.executeQuery("SELECT * FROM klienci WHERE email = '" + dane[5] + "'");
+                        myRs = myStat.executeQuery("SELECT * FROM klienci WHERE email = '" + dane[5] + "'");
 
-                    if (myRs.next()) {
-                        JOptionPane.showMessageDialog(null, "Rejestracja przebiegła pomyślnie.", "Rejestracja", JOptionPane.INFORMATION_MESSAGE);
+                        if (myRs.next()) {
+                            JOptionPane.showMessageDialog(null, "Rejestracja przebiegła pomyślnie.", "Rejestracja", JOptionPane.INFORMATION_MESSAGE);
 
-                    } else {
-                        JOptionPane.showMessageDialog(null, "Rejestracja nie powiodła się.", "Rejestracja", JOptionPane.ERROR_MESSAGE);
+                        } else {
+                            JOptionPane.showMessageDialog(null, "Rejestracja nie powiodła się.", "Rejestracja", JOptionPane.ERROR_MESSAGE);
 
-                    }
+                        }
+                    } else
+                        JOptionPane.showMessageDialog(null, "Użytkownik o podanym adresie email już istnieje.", "Rejestracja", JOptionPane.ERROR_MESSAGE);
+                    view_of_rejestracja.setVisible(false);
+                    view_of_rejestracja_klient.setVisible(false);
+                    view_of_logging.setIsVisible(true);
+                } catch (SQLException throwables) {
+                    throwables.printStackTrace();
                 }
-                else
-                    JOptionPane.showMessageDialog(null,"Użytkownik o podanym adresie email już istnieje.", "Rejestracja", JOptionPane.ERROR_MESSAGE);
-                view_of_rejestracja.setVisible(false);
-                view_of_rejestracja_klient.setVisible(false);
-                view_of_logging.setIsVisible(true);
-            } catch (SQLException throwables) {
-                throwables.printStackTrace();
             }
             });
+
             view_of_rejestracja_klient.getCofnijButton().addActionListener(e1 -> {
                 view_of_rejestracja_klient.setVisible(false);
                 view_of_rejestracja.setIsVisible(true);
@@ -106,34 +284,34 @@ public class LoginController {
                         view_of_rejestracja_pracownika.getEmailTextField().getText(),
                         new String(view_of_rejestracja_pracownika.getHasloPasswordField().getPassword())
                 };
+            if(sprawdzenieDanychRejestracjiPracownika(dane)) {
+                try {
+                    String sql = "SELECT * FROM pracownicy WHERE email = '" + dane[3] + "'";
+                    myRs = myStat.executeQuery(sql);
+                    if (!myRs.next()) {
 
-            try{
-                String sql = "SELECT * FROM pracownicy WHERE email = '"+dane[3]+"'";
-                myRs = myStat.executeQuery(sql);
-                if(!myRs.next()) {
+                        sql = "INSERT INTO pracownicy (imie, nazwisko, nr_telefonu, email, haslo, stawka, pracownik, uprawnienia) VALUES ('" + dane[0] + "', '" + dane[1] + "'," +
+                                "'" + dane[2] + "', '" + dane[3] + "', '" + dane[4] + "','0', '0','" + view_of_rejestracja_pracownika.getUprawnieniaCB().getSelectedItem().toString() + "') ";
 
-                     sql = "INSERT INTO pracownicy (imie, nazwisko, nr_telefonu, email, haslo, stawka, pracownik, uprawnienia) VALUES ('"+dane[0]+"', '"+dane[1]+"'," +
-                            "'"+dane[2]+"', '"+dane[3]+"', '"+dane[4]+"','0', '0','"+view_of_rejestracja_pracownika.getUprawnieniaCB().getSelectedItem().toString()+"') ";
+                        myStat.executeUpdate(sql);
 
-                    myStat.executeUpdate(sql);
+                        myRs = myStat.executeQuery("SELECT * FROM pracownicy WHERE email = '" + dane[3] + "'");
 
-                    myRs = myStat.executeQuery("SELECT * FROM pracownicy WHERE email = '" + dane[3] + "'");
+                        if (myRs.next()) {
+                            JOptionPane.showMessageDialog(null, "Rejestracja przebiegła pomyślnie.", "Rejestracja", JOptionPane.INFORMATION_MESSAGE);
 
-                    if (myRs.next()) {
-                        JOptionPane.showMessageDialog(null, "Rejestracja przebiegła pomyślnie.", "Rejestracja", JOptionPane.INFORMATION_MESSAGE);
+                        } else {
+                            JOptionPane.showMessageDialog(null, "Rejestracja nie powiodła się.", "Rejestracja", JOptionPane.ERROR_MESSAGE);
 
-                    } else {
-                        JOptionPane.showMessageDialog(null, "Rejestracja nie powiodła się.", "Rejestracja", JOptionPane.ERROR_MESSAGE);
-
-                    }
+                        }
+                    } else
+                        JOptionPane.showMessageDialog(null, "Użytkownik o podanym adresie email już istnieje.", "Rejestracja", JOptionPane.ERROR_MESSAGE);
+                    view_of_rejestracja.setVisible(false);
+                    view_of_rejestracja_pracownika.setVisible(false);
+                    view_of_logging.setIsVisible(true);
+                } catch (SQLException throwables) {
+                    throwables.printStackTrace();
                 }
-                else
-                    JOptionPane.showMessageDialog(null,"Użytkownik o podanym adresie email już istnieje.", "Rejestracja", JOptionPane.ERROR_MESSAGE);
-                view_of_rejestracja.setVisible(false);
-                view_of_rejestracja_pracownika.setVisible(false);
-                view_of_logging.setIsVisible(true);
-            } catch (SQLException throwables) {
-                throwables.printStackTrace();
             }
             });
 
