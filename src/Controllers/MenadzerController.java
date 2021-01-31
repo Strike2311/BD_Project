@@ -154,8 +154,6 @@ public class MenadzerController {
         JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         e.printStackTrace();
         }
-
-
     }
 
     private void showDostawcy() {
@@ -185,7 +183,6 @@ public class MenadzerController {
                     {
                         view_dadaj_dostawce.setVisible(false);
                         view_dostawcy.setVisible(true);
-
                     }
             );
         });

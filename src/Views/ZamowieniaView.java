@@ -16,7 +16,7 @@ public class ZamowieniaView extends JFrame{
     private JButton nadajButton;
     private JButton cofnijButton;
     private JScrollPane scrollPaneTab;
-    String[] columnNames = {"ID zamowienia", "ID klienta", "Data zamowienia"};
+    String[] columnNames = {"ID zamowienia", "ID klienta", "Imię", "Nazwisko", "Data zamowienia"};
     private DefaultTableModel tableModel = new DefaultTableModel(columnNames, 0)
     {
         @Override
@@ -28,7 +28,7 @@ public class ZamowieniaView extends JFrame{
 
     public ZamowieniaView(Statement st, ResultSet rs) {
 
-        setSize(400, 500);
+        setSize(500, 400);
         setTitle("Zamowienia");
         setContentPane(mainPanel);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -39,16 +39,19 @@ public class ZamowieniaView extends JFrame{
 
         try {
 
-            String query = "SELECT idZamowienia, Klienci_id_klienci, data_zamowienia FROM zamowienia";
+            String query = "SELECT idZamowienia, Klienci_id_klienci, k.imie as imie, k.nazwisko as nazwisko, data_zamowienia FROM zamowienia " +
+                    "JOIN klienci k on k.id_klienci = zamowienia.Klienci_id_klienci WHERE status = 'przygotowane do nadania'";
             rs = st.executeQuery(query);
 
             while (rs.next()) {
 
                 String idZam = rs.getString("idZamowienia");
                 String idKlient = rs.getString("Klienci_id_klienci");
+                String imie = rs.getString("imie");
+                String nazw = rs.getString("nazwisko");
                 String dateZam = rs.getString("data_zamowienia");
 
-                String[] data = { idZam, idKlient, dateZam };
+                String[] data = { idZam, idKlient, imie, nazw, dateZam };
                 tableModel.addRow(data);
             }
 
@@ -65,6 +68,37 @@ public class ZamowieniaView extends JFrame{
         zamowieniaTable.setRowSelectionAllowed(true);
         setVisible(true);
 
+    }
+
+    public void refresh(Statement st, ResultSet rs)
+    {
+        try {
+
+            String query = "SELECT idZamowienia, Klienci_id_klienci, k.imie as imie, k.nazwisko as nazwisko, data_zamowienia FROM zamowienia " +
+                    "JOIN klienci k on k.id_klienci = zamowienia.Klienci_id_klienci WHERE status = 'przygotowane do nadania'";
+            rs = st.executeQuery(query);
+
+            int rowCount = tableModel.getRowCount();
+            for (int i = rowCount - 1; i >= 0; i--) {
+                tableModel.removeRow(i);
+            }
+
+            while (rs.next()) {
+
+                String idZam = rs.getString("idZamowienia");
+                String idKlient = rs.getString("Klienci_id_klienci");
+                String imie = rs.getString("imie");
+                String nazw = rs.getString("nazwisko");
+                String dateZam = rs.getString("data_zamowienia");
+
+                String[] data = { idZam, idKlient, imie, nazw, dateZam };
+                tableModel.addRow(data);
+            }
+
+        }catch (SQLException c)
+        {
+            JOptionPane.showMessageDialog(null,"Error in Zamowienia Grid View..... "+c);
+        }
     }
 
     public JTable getZamowieniaTable() {

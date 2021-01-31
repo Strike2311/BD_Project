@@ -16,7 +16,7 @@ public class PracownikHomeView extends JFrame{
         setTitle("Menu Pracownika");
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
-        setSize(400, 200);
+        setSize(400, 250);
         setResizable(false);
         setContentPane(MainPanel);
         setVisible(true);
@@ -55,4 +55,22 @@ public class PracownikHomeView extends JFrame{
     public void setWprowadzenieZmianIlosciProduktówButton(JButton wprowadzenieZmianIlosciProduktówButton) {
         this.wprowadzenieZmianIlosciProduktówButton = wprowadzenieZmianIlosciProduktówButton;
     }
+    public JButton getWylogujButton() {
+        return wylogujButton;
+    }
+
+    public void setWylogujButton(JButton wylogujButton) {
+        this.wylogujButton = wylogujButton;
+    }
+
+    public JButton getDodajPartieButton() {
+        return dodajPartieButton;
+    }
+
+    public void setDodajPartieButton(JButton dodajPartieButton) {
+        this.dodajPartieButton = dodajPartieButton;
+    }
+
+    private JButton dodajPartieButton;
+
 }
