@@ -36,16 +36,15 @@ public class KlientController {
 
     }
     public void init() {
-        //view.getIdField().setText(LoginTools.getLoginIdText(this.model));
-        //view.getPersonalDataButton().addActionListener(e -> showPersonalData());
-      view.getZamówTowarButton().addActionListener(e -> showZamowTowar());
-      view.getzarządzajZamówieniamiButton().addActionListener(e -> {
-          try {
-              showZarzadzajZamowieniami();
-          } catch (SQLException throwables) {
-              throwables.printStackTrace();
-          }
-      });
+        view_of_logging.setIsVisible(false);
+        view.getZamówTowarButton().addActionListener(e -> showZamowTowar());
+        view.getzarządzajZamówieniamiButton().addActionListener(e -> {
+            try {
+                showZarzadzajZamowieniami();
+            } catch (SQLException throwables) {
+                throwables.printStackTrace();
+            }
+        });
       view.getWylogujButton().addActionListener(e ->{
           view.setVisible(false);
           view_of_logging.getPasswordField().setText("");

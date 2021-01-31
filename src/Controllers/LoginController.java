@@ -40,6 +40,9 @@ public class LoginController {
     public void init() {
         view_of_logging.getButtonZaloguj().addActionListener(e -> logowanie());
         view_of_logging.getSignUpButton().addActionListener(e -> rejestracjaWyborUzytkownika());
+        view_of_logging.getZamknijButton().addActionListener(e -> {
+            System.exit(0);
+        });
     }
     private boolean sprawdzenieDanychRejestracjiKlienta(String [] dane){
         for(int i=0; i<7; i++){
@@ -241,7 +244,7 @@ public class LoginController {
                     myRs = myStat.executeQuery(sql);
                     if (!myRs.next()) {
 
-                        sql = "INSERT INTO klienci (imie, nazwisko, nr_telefonul,miasto,adres, email, haslo) VALUES ('" + dane[0] + "', '" + dane[1] + "'," +
+                        sql = "INSERT INTO klienci (imie, nazwisko, nr_telefonu,miasto,adres, email, haslo) VALUES ('" + dane[0] + "', '" + dane[1] + "'," +
                                 "'" + dane[2] + "', '" + dane[3] + "', '" + dane[4] + "', '" + dane[5] + "','" + dane[6] + "')";
 
                         myStat.executeUpdate(sql);
@@ -340,23 +343,16 @@ public class LoginController {
         String login = view_of_logging.getTextField1().getText();
         String haslo = new String(view_of_logging.getPasswordField().getPassword());
 
-        System.out.println(userType);
 
         switch (userType) {
             case 0:
-
                 new KlientController(login,haslo, view_of_logging);
-                view_of_logging.setIsVisible(false);
                 break;
             case 1:
-
                 new PracownikController(login,haslo,view_of_logging);
-                view_of_logging.setIsVisible(false);
-
                 break;
             case 2:
                 new MenadzerController(login, haslo,view_of_logging);
-                view_of_logging.setIsVisible(false);
                 break;
             default:
                 throw new IllegalStateException("Unexpected value: " + userType);

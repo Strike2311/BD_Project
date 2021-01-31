@@ -11,6 +11,7 @@ public class DodanieDostawcyView extends JFrame{
     private JTextField odlegloscTextField;
     private JButton addButton;
     private JButton closeButton;
+    private JComboBox surowceComboBox;
 
     public DodanieDostawcyView()
     {
@@ -19,6 +20,14 @@ public class DodanieDostawcyView extends JFrame{
         setContentPane(mainPane);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
+
+        surowceComboBox.addItem(new String("Ziemniaki"));
+        surowceComboBox.addItem(new String("Sól"));
+        surowceComboBox.addItem(new String("Olej"));
+        surowceComboBox.addItem(new String("Pieprz"));
+        surowceComboBox.addItem(new String("Aromaty"));
+        surowceComboBox.addItem(new String("Inne przyprawy"));
+
 
         setVisible(true);
     }
@@ -78,6 +87,14 @@ public class DodanieDostawcyView extends JFrame{
 
     public void setCloseButton(JButton closeButton) {
         this.closeButton = closeButton;
+    }
+
+    public JComboBox getSurowceComboBox() {
+        return surowceComboBox;
+    }
+
+    public void setSurowceComboBox(JComboBox surowceComboBox) {
+        this.surowceComboBox = surowceComboBox;
     }
 
 }

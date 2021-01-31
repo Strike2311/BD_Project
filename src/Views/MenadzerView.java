@@ -17,7 +17,7 @@ public class MenadzerView extends JFrame{
         setTitle("Menu menadżera");
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
-        setSize(400, 200);
+        setSize(400, 250);
         setResizable(false);
         setContentPane(MainPanel);
         setVisible(true);

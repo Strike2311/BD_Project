@@ -34,6 +34,7 @@ public class PracownikController {
     }
 
     public void init(){
+        view_of_logging.setIsVisible(false);
         view.getNadanieZamowienButton().addActionListener(e -> showZamowienia());
         view.getRejetracjaGodzinPracyButton().addActionListener(e -> godzinyPracy());
         view.getDodajPartieButton().addActionListener(e -> wprowadzPartie());

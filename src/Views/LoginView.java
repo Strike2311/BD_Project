@@ -17,6 +17,7 @@ public class LoginView {
     private JButton buttonZaloguj;
     private JPanel mainPanel;
     private JButton signUpButton;
+    private JButton zamknijButton;
 
     public LoginView() {
         frame = new JFrame("Logowanie");
@@ -74,6 +75,14 @@ public class LoginView {
     }
     public JFrame getFrame() {
         return frame;
+    }
+
+    public JButton getZamknijButton() {
+        return zamknijButton;
+    }
+
+    public void setZamknijButton(JButton zamknijButton) {
+        this.zamknijButton = zamknijButton;
     }
 
 }

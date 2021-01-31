@@ -9,6 +9,8 @@ public class MenadzerModel extends LoginModel{
     String jdbcsrc = "jdbc:mysql://localhost:3306/mydb";
     String login = "root";
     String password = "root1234";
+
+
     Connection myCon;
     Statement myStat;
     ResultSet myRs;
@@ -28,18 +30,15 @@ public class MenadzerModel extends LoginModel{
             if(myRs.next()) {
                 if(myRs.getString("uprawnienia").equals("Menadżer")) {
                     super.setCzyZalogowany(true);
-                    System.out.println("zalogowano menadżera");
                 }
                 else
                 {
                     super.setCzyZalogowany(false);
-                    System.out.println("błąd1");
                 }
             }
             else
             {
                 super.setCzyZalogowany(false);
-                System.out.println("błąd2");
             }
         }catch(SQLException e){
             e.printStackTrace();

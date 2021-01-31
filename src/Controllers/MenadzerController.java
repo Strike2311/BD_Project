@@ -29,6 +29,7 @@ public class MenadzerController {
     }
 
     public void init(){
+        view_of_logging.setIsVisible(false);
         view.getDostawcyButton().addActionListener(e -> showDostawcy());
         view.getBudzetButton().addActionListener(e -> showBudzet());
         view.getSurowceButton().addActionListener(e -> showSurowce());
@@ -51,20 +52,27 @@ public class MenadzerController {
             {
                 int column = 0;
                 int row = view_prac.getNiezatwoerdzeniPracownicyTable().getSelectedRow();
-                String dane[] = {view_prac.getNiezatwoerdzeniPracownicyTable().getModel().getValueAt(row, column).toString()};
-                int index = Integer.parseInt(view_prac.getNiezatwoerdzeniPracownicyTable().getModel().getValueAt(row, column).toString());
-                if(index != 0)
+                if(row != -1)
                 {
-                    model.nadanieUprawnien(model.getMyRs(), model.getMyStat(), dane);
-                    view_prac.refresh_zatwierdzonych(model.getMyStat(), model.getMyRs());
-                    view_prac.refresh_niezatwierdzonych(model.getMyStat(), model.getMyRs());
+                    String dane[] = {view_prac.getNiezatwoerdzeniPracownicyTable().getModel().getValueAt(row, column).toString()};
+                    int index = Integer.parseInt(view_prac.getNiezatwoerdzeniPracownicyTable().getModel().getValueAt(row, column).toString());
+                    if(index != 0)
+                    {
+                        model.nadanieUprawnien(model.getMyRs(), model.getMyStat(), dane);
+                        view_prac.refresh_zatwierdzonych(model.getMyStat(), model.getMyRs());
+                        view_prac.refresh_niezatwierdzonych(model.getMyStat(), model.getMyRs());
+                    }
                 }
+                else
+                {
+                    JOptionPane.showMessageDialog(null, "Wybierz wiersz",
+                            "Error", JOptionPane.ERROR_MESSAGE);
+                }
+
             }catch (SQLException x) {
                 JOptionPane.showMessageDialog(null, x.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
                 x.printStackTrace();
             }
-            view.setVisible(true);
-            view_prac.setVisible(false);
         });
         view_prac.getStawkaButton().addActionListener(e -> {
             view.setVisible(false);
@@ -72,28 +80,57 @@ public class MenadzerController {
             {
                 int column = 0;
                 int row = view_prac.getZatwierdzeniPracownicyTable().getSelectedRow();
-
-                String stawka = view_prac.getStawkaTextField().getText();
-                String dane[] = {view_prac.getZatwierdzeniPracownicyTable().getModel().getValueAt(row, column).toString(), stawka};
-                int index = Integer.parseInt(view_prac.getZatwierdzeniPracownicyTable().getModel().getValueAt(row, column).toString());
-                    System.out.println(index);
-                    if(index != 0)
+                if(row != -1)
+                {
+                    String stawka = view_prac.getStawkaTextField().getText();
+                    if(stawka.length() > 3 || stawka.length() < 2)
                     {
-                        model.nadzorWynagrodzen(model.getMyRs(), model.getMyStat(), dane);
-                        view_prac.refresh_zatwierdzonych(model.getMyStat(), model.getMyRs());
-                        view_prac.refresh_niezatwierdzonych(model.getMyStat(), model.getMyRs());
+                        JOptionPane.showMessageDialog(null, "Podaj poprawną stawkę",
+                                "Error", JOptionPane.ERROR_MESSAGE);
                     }
+                    else if (stawka.length() < 4 && stawka.length() > 1)
+                    {
+                        char c;
+                        int digitCount = 0;
+                        for (int j = 0; j < stawka.length(); j++) {
+                            c = stawka.charAt(j);
+                            if (Character.isDigit(c)) {
+                                digitCount++;
+                            }
+                        }
+                        if(digitCount != stawka.length())
+                        {
+                            JOptionPane.showMessageDialog(null, "Podaj poprawną stawkę",
+                                    "Error", JOptionPane.ERROR_MESSAGE);
+                        }
+                        else
+                        {
+                            String dane[] = {view_prac.getZatwierdzeniPracownicyTable().getModel().getValueAt(row, column).toString(), stawka};
+                            int index = Integer.parseInt(view_prac.getZatwierdzeniPracownicyTable().getModel().getValueAt(row, column).toString());
+                            System.out.println(index);
+                            if(index != 0)
+                            {
+                                model.nadzorWynagrodzen(model.getMyRs(), model.getMyStat(), dane);
+                                view_prac.refresh_zatwierdzonych(model.getMyStat(), model.getMyRs());
+                                view_prac.refresh_niezatwierdzonych(model.getMyStat(), model.getMyRs());
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    JOptionPane.showMessageDialog(null, "Wybierz wiersz",
+                            "Error", JOptionPane.ERROR_MESSAGE);
+                }
             }catch (SQLException x) {
                 JOptionPane.showMessageDialog(null, x.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
                 x.printStackTrace();
             }
-            view_prac.setVisible(false);
-            view.setVisible(true);
 
         });
         view_prac.getWsteczButton().addActionListener(e -> {
             view.setVisible(true);
-            view_prac.setVisible(false);
+            view_prac.dispose();
         });
     }
 
@@ -127,7 +164,7 @@ public class MenadzerController {
                 });
                 zamawianie_surowcow_view.getWsteczButton().addActionListener(e1 ->
                 {
-                    zamawianie_surowcow_view.setVisible(false);
+                    zamawianie_surowcow_view.dispose();
                     view_surowce.setVisible(true);
                 });
 
@@ -135,38 +172,20 @@ public class MenadzerController {
         });
         view_surowce.getWsteczButton().addActionListener(e ->
         {
-            view_surowce.setVisible(false);
+            view_surowce.dispose();
             view.setVisible(true);
         });
 
 
     }
-/*
-    void sprawdz_dostawce(String id_dost)
-    {
-        try {
-            String sql = "SELECT  FROM surowce";
-            model.getMyStat().executeQuery(sql);
 
-            rs = model.getMyRs() ;
-            rs = model.getMyStat().executeQuery(sql);
-            rs.next();
-            String hrs = rs.getString("liczba_godzin");
-            hours = hrs;
-
-        }catch (SQLException x) {
-            JOptionPane.showMessageDialog(null, x.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-            x.printStackTrace();
-        }
-    }
-*/
     private void showBudzet(){
         view.setVisible(false);
         try{
             float roznica = model.podgladBudzetu(model.getMyStat(), model.getMyRs());
             BudzetView view_budzet = new BudzetView(roznica);
             view_budzet.getCofnijButton().addActionListener(e -> {
-                view_budzet.setVisible(false);
+                view_budzet.dispose();
                 view.setVisible(true);
             });
 
@@ -184,19 +203,27 @@ public class MenadzerController {
             DodanieDostawcyView view_dadaj_dostawce = new DodanieDostawcyView();
             view_dadaj_dostawce.getAddButton().addActionListener(e1 ->
             {
-                try{
-                    String dane[] = {view_dadaj_dostawce.getNazwaTextField().getText(),
-                        view_dadaj_dostawce.getLokalizacjaTextField().getText(),
-                        view_dadaj_dostawce.getSurowiecTextField().getText(),
-                        view_dadaj_dostawce.getCenaTextField().getText(),
-                        view_dadaj_dostawce.getOdlegloscTextField().getText()};
-                    model.dodajDostawce(model.getMyStat(), dane);
-                    view_dostawcy.refresh(model.getMyStat(), model.getMyRs());
-                    JOptionPane.showMessageDialog(null,
-                            "Dodano dostawcę");
-                } catch (SQLException x) {
-                JOptionPane.showMessageDialog(null, x.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-                x.printStackTrace();
+
+                String nazwa = view_dadaj_dostawce.getNazwaTextField().getText();
+                String lok = view_dadaj_dostawce.getLokalizacjaTextField().getText();
+                String sur = view_dadaj_dostawce.getSurowceComboBox().getSelectedItem().toString();
+                String cena = view_dadaj_dostawce.getCenaTextField().getText();
+                String odl = view_dadaj_dostawce.getOdlegloscTextField().getText();
+                String dane[] = {nazwa, lok, sur, cena, odl};
+                if(check_data(dane))
+                {
+                    try{
+
+
+                        model.dodajDostawce(model.getMyStat(), dane);
+                        view_dostawcy.refresh(model.getMyStat(), model.getMyRs());
+                        JOptionPane.showMessageDialog(null,
+                                "Dodano dostawcę");
+
+                    } catch (SQLException x) {
+                        JOptionPane.showMessageDialog(null, x.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                        x.printStackTrace();
+                    }
                 }
             });
             view_dadaj_dostawce.getCloseButton().addActionListener(e1 ->
@@ -212,10 +239,19 @@ public class MenadzerController {
 
                 int column = 0;
                 int row = view_dostawcy.getDostawcyTable().getSelectedRow();
-                int value = Integer.parseInt(view_dostawcy.getTableModel().getValueAt(row, column).toString());
-                model.usunDostawce(model.getMyStat(), value);
-                view_dostawcy.refresh(model.getMyStat(), model.getMyRs());
-
+                if(row == -1)
+                {
+                    JOptionPane.showMessageDialog(null,
+                            "Wybierz wiersz",
+                            "Błąd",
+                            JOptionPane.ERROR_MESSAGE);
+                }
+                else
+                {
+                    int value = Integer.parseInt(view_dostawcy.getTableModel().getValueAt(row, column).toString());
+                    model.usunDostawce(model.getMyStat(), value);
+                    view_dostawcy.refresh(model.getMyStat(), model.getMyRs());
+                }
             } catch (SQLException x) {
                 JOptionPane.showMessageDialog(null, x.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
                 x.printStackTrace();
@@ -226,5 +262,84 @@ public class MenadzerController {
             view_dostawcy.setVisible(false);
             view.setVisible(true);
         });
+    }
+
+    public boolean check_data(String[] dane)
+    {
+        if(dane[0].length() > 44 || dane[0].length() < 3)
+        {
+            JOptionPane.showMessageDialog(null, "Zła nazwa",
+                    "Error", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+        if(dane[1].length() < 45 && dane[1].length() > 2) {
+            char c;
+            int letterCount = 0;
+            for (int j = 0; j < dane[1].length(); j++) {
+                c = dane[1].charAt(j);
+                if (Character.isLetter(c)) {
+                    letterCount++;
+                }
+            }
+            if(letterCount != dane[1].length())
+            {
+                JOptionPane.showMessageDialog(null, "Zła lokalizacja",
+                        "Error", JOptionPane.ERROR_MESSAGE);
+                return false;
+            }
+        }
+        else
+        {
+            JOptionPane.showMessageDialog(null, "Zła lokalizacja",
+                    "Error", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+        if(dane[3].length() < 5 && dane[3].length() > 0)
+        {
+            char c;
+            int digitCount = 0;
+            for (int j = 0; j < dane[3].length(); j++) {
+                c = dane[3].charAt(j);
+                if (Character.isDigit(c)) {
+                    digitCount++;
+                }
+            }
+            if(digitCount != dane[3].length())
+            {
+                JOptionPane.showMessageDialog(null, "Zła cena",
+                        "Error", JOptionPane.ERROR_MESSAGE);
+                return false;
+            }
+        }
+        else
+        {
+            JOptionPane.showMessageDialog(null, "Zła cena",
+                    "Error", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+        if(dane[4].length() < 5 && dane[4].length() > 0)
+        {
+            char c;
+            int digitCount = 0;
+            for (int j = 0; j < dane[4].length(); j++) {
+                c = dane[4].charAt(j);
+                if (Character.isDigit(c)) {
+                    digitCount++;
+                }
+            }
+            if(digitCount != dane[4].length())
+            {
+                JOptionPane.showMessageDialog(null, "Zła odleglość",
+                        "Error", JOptionPane.ERROR_MESSAGE);
+                return false;
+            }
+        }
+        else
+        {
+            JOptionPane.showMessageDialog(null, "Zła odleglość",
+                    "Error", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+        return true;
     }
 }
