@@ -176,14 +176,19 @@ public class KlientModel extends LoginModel {
 
     public void zgloszenieReklamacji(ResultSet myRs, Statement myStat, String id) throws SQLException {
         try {
+
             String jdbcsrc = "jdbc:mysql://localhost:3306/mydb";
             String login = "root";
             String password = "root1234";
+
+
             Connection myCon = DriverManager.getConnection(jdbcsrc,login,password);
             Statement myStat_tmp = myCon.createStatement();
             ResultSet myRes_tmp;
+
+
             //Zmiana statusu zamówianie na reklamacje
-            String sql = "CALL ZmienStatusZamowienia('reklamacja'," + id + ")";
+            String sql = "CALL ZmienStatusZamowieniaZwrot('reklamacja'," + id + ")";
             myStat.executeUpdate(sql);
 
             //Wyszukanie id zwracanych partii oraz ich ilości

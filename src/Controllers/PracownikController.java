@@ -112,6 +112,7 @@ public class PracownikController {
 
     private void wprowadzPartie() {
 
+        view.setVisible(false);
         PartieView partie_view = new PartieView(model.getMyStat(), model.getMyRs());
         partie_view.getDodajPartieButton().addActionListener(e -> {
 
@@ -122,12 +123,32 @@ public class PracownikController {
                 try {
                     int column = 0;
                     int row = dodaj_partie_view.getProduktTable().getSelectedRow();
-                    String id_prod = dodaj_partie_view.getProduktTable().getModel().getValueAt(row, column).toString();
-                    row = dodaj_partie_view.getPakowanieTable().getSelectedRow();
-                    String id_pak = dodaj_partie_view.getPakowanieTable().getModel().getValueAt(row, column).toString();
-                    String dane[] = {id_prod, id_pak};
-                    model.dodajPartie(model.getMyRs(), model.getMyStat(), dane);
-                    partie_view.refresh(model.getMyStat(), model.getMyRs());
+                    if(row != -1) {
+                        String id_prod = dodaj_partie_view.getProduktTable().getModel().getValueAt(row, column).toString();
+                        row = dodaj_partie_view.getPakowanieTable().getSelectedRow();
+                        if (row != -1) {
+                            String id_pak = dodaj_partie_view.getPakowanieTable().getModel().getValueAt(row, column).toString();
+                            String dane[] = {id_prod, id_pak};
+                            model.dodajPartie(model.getMyRs(), model.getMyStat(), dane);
+                            partie_view.refresh(model.getMyStat(), model.getMyRs());
+
+                            JOptionPane.showMessageDialog(null,
+                                    "Poprawnie dodano partię");
+                        }
+                        else
+                        {
+                            JOptionPane.showMessageDialog(null,
+                                    "Wybierz rodzaj pakowania z listy po prawej",
+                                    "Błąd",
+                                    JOptionPane.ERROR_MESSAGE);
+                        }
+                    }
+                    else {
+                        JOptionPane.showMessageDialog(null,
+                                "Wybierz rodzaj produktu z listy po lewej",
+                                "Błąd",
+                                JOptionPane.ERROR_MESSAGE);
+                    }
                 }catch (SQLException x) {
                     JOptionPane.showMessageDialog(null, x.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
                     x.printStackTrace();
@@ -148,16 +169,12 @@ public class PracownikController {
     }
 
     private void godzinyPracy() {
-
-
+        view.setVisible(false);
         refresh_godz_pracy();
-
         GodzinyPracyView godziny_view = new GodzinyPracyView(hours);
         godziny_view.getZatwierdzButton().addActionListener(e -> {
-
             try
             {
-                view.setVisible(false);
                 String godziny = godziny_view.getWprowadzGodzinyTextField().getText();
                 if(godziny.length() > 2 || godziny.length() == 0)
                 {
@@ -188,6 +205,9 @@ public class PracownikController {
                         model.rejestracjaGodzinPracy(model.getMyRs(), model.getMyStat(), godziny, model.getId_prac());
                         refresh_godz_pracy();
                         godziny_view.getGodzinyPracyTextField().setText(hours);
+
+                        JOptionPane.showMessageDialog(null,
+                                "Poprawnie wprowadzono");
                     }
                 }
             }catch (SQLException x) {

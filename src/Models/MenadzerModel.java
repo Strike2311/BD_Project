@@ -80,7 +80,6 @@ public class MenadzerModel extends LoginModel{
     public static void usunDostawce(Statement myStat, int id) throws SQLException {
         try {
             String sql = "CALL UsunDostawce_ID('" + id + "')";
-            //", '" + dane[1] + "', '" + dane[2] + "', '" + dane[3] + "', '" + dane[4] + "')";
             myStat.executeUpdate(sql);
 
         }catch(SQLException e){
