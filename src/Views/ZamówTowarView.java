@@ -15,7 +15,7 @@ public class ZamówTowarView extends JFrame{
     private JPanel MainPanel;
     private JTable tabelaZamowTowary;
     private JScrollPane ScrollPanel;
-    String[] columnNames = {"ID Partii", "Cena", "Stan"};
+    String[] columnNames = {"ID Partii","Nazwa Produktu","Rodzaj Pakowania","Ilość Sztuk w Opakowaniu", "Cena", "Stan"};
 
     public JTable getTabelaZamowTowary() {
         return tabelaZamowTowary;
@@ -49,21 +49,26 @@ public class ZamówTowarView extends JFrame{
         setLocationRelativeTo(null);
 
         try {
+            Statement st_tmp = st;
+            ResultSet rs_tmp = rs;
             String sql = "SELECT id_klienci FROM klienci WHERE email ='"+email+"'";
             rs = st.executeQuery(sql);
             rs.next();
             String id = rs.getString("id_klienci");
-            String query = "SELECT id_partii, cena, stan FROM partia";
+            String query = "SELECT par.id_partii,prod.nazwa_produktu,pak.nazwa_pakietu, pak.liczba_sztuk, par.cena, par.stan FROM partia par, produkt prod, pakowanie pak WHERE par.Produkt_idProdukt = prod.idProdukt AND par.Pakowanie_id_pakowanie = pak.id_pakowanie";
             rs = st.executeQuery(query);
 
             while (rs.next()) {
 
                 String id_partii = rs.getString("id_partii");
+                String nazwa = rs.getString("nazwa_produktu");
+                String pakowanie = rs.getString("nazwa_pakietu");
+                String ilosc = rs.getString("liczba_sztuk");
                 String cena = rs.getString("cena");;
                 String stan = rs.getString("stan");
 
 
-                String[] data = { id_partii, cena, stan };
+                String[] data = { id_partii,nazwa,pakowanie,ilosc, cena, stan };
                 tableModel.addRow(data);
             }
         }catch (SQLException c)

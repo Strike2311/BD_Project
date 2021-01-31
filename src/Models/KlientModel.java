@@ -183,7 +183,7 @@ public class KlientModel extends LoginModel {
             Statement myStat_tmp = myCon.createStatement();
             ResultSet myRes_tmp;
             //Zmiana statusu zamówianie na reklamacje
-            String sql = "CALL ZmienStatusZamowienia('Reklamacja'," + id + ")";
+            String sql = "CALL ZmienStatusZamowienia('reklamacja'," + id + ")";
             myStat.executeUpdate(sql);
 
             //Wyszukanie id zwracanych partii oraz ich ilości
