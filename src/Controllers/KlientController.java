@@ -71,6 +71,7 @@ public class KlientController {
                 JOptionPane.showMessageDialog(null, x.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
                 x.printStackTrace();
             }catch(ArrayIndexOutOfBoundsException e1){
+                JOptionPane.showMessageDialog(null, "Nie wybrano wiersza", "Error", JOptionPane.ERROR_MESSAGE);
 
             }
         });
