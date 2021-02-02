@@ -240,6 +240,7 @@ public class LoginController {
         view_of_logging.setIsVisible(false);
         RejestracjaWybórView view_of_rejestracja = new RejestracjaWybórView();
         view_of_rejestracja.getKlientButton().addActionListener(e ->{
+            view_of_rejestracja.setVisible(false);
             RejestracjaKlientView view_of_rejestracja_klient = new RejestracjaKlientView();
 
             view_of_rejestracja_klient.getZarejestrujButton().addActionListener(e1 -> {
