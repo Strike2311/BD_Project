@@ -13,7 +13,7 @@ public class DostawcyView extends JDialog{
     private JButton removeButton;
     private JScrollPane scrlPane;
     private JPanel mainPane;
-    String[] columnNames = {"ID dostawcy", "Nazwa", "Lokalizacja", "Odległość", "Surowiec", "Cena"};
+    String[] columnNames = {"ID dostawcy", "Nazwa", "Lokalizacja", "Surowiec", "Cena", "Odległość"};
 
     private DefaultTableModel tableModel = new DefaultTableModel(columnNames, 0)
     {
