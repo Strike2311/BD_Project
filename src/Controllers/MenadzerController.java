@@ -157,7 +157,7 @@ public class MenadzerController {
                             {
                                 String id_dost = zamawianie_surowcow_view.getDostawcyTable().getModel().getValueAt(row2, column2).toString();
                                 String ilosc = zamawianie_surowcow_view.getIloscTextField().getText();
-                                if(ilosc.length() > 5 || ilosc.length() < 1)
+                                if(ilosc.length() > 5 || ilosc.length() < 1 || ilosc.equals("0"))
                                 {
                                     JOptionPane.showMessageDialog(null, "Wprowadź poprawną ilość",
                                             "Error", JOptionPane.ERROR_MESSAGE);
