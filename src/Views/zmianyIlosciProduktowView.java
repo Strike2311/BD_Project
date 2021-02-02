@@ -8,5 +8,5 @@ public class zmianyIlosciProduktowView {
     private JTextField iloscSurowcaTextField;
     private JLabel iloscSurowcaLabel;
     private JButton zatwierdźButton;
-    private JButton cofnijButton;
+    private JButton wsteczButton;
 }
