@@ -130,7 +130,7 @@ public class KlientController {
 
     }
     public boolean sprawdzeniePoprawnosciDanychZamowienie(String s){
-        if (s.length()>0 && s.length()<10){
+        if (s.length()>0 && s.length()<10 && Float.parseFloat(s)>0){
         for(int i=0; i<s.length(); i++){
             char c = s.charAt(i);
             if(!Character.isDigit(c)){
