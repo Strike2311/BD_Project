@@ -15,7 +15,7 @@ public class ZamowSurowiecView extends JFrame{
     private JTable dostawcyTable;
     private String nazwa_sur;
 
-    String[] columnNames = {"ID dostawcy", "Nazwa", "Lokalizacja", "Odległość", "Surowiec", "Cena"};
+    String[] columnNames = {"ID dostawcy", "Nazwa", "Lokalizacja", "Surowiec", "Cena", "Odległość"};
     private DefaultTableModel tableModel = new DefaultTableModel(columnNames, 0)
     {
         @Override
