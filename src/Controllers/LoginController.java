@@ -46,7 +46,7 @@ public class LoginController {
     }
     private boolean sprawdzenieDanychRejestracjiKlienta(String [] dane){
         for(int i=0; i<7; i++){
-            if(i==0 || i ==1 || i==3) {//imie nazwisko i miasto
+            if(i==0 || i ==1) {//imie nazwisko i miasto
                 if(dane[i].length()>=2 && dane[i].length()<45) {
                     for (int j = 0; j < dane[i].length(); j++) {
                        char c = dane[i].charAt(j);
@@ -54,6 +54,21 @@ public class LoginController {
                            JOptionPane.showMessageDialog(null, "Imie, nazwisko oraz miasto nie mogą zawierać cyfr.", "Błąd rejestracji", JOptionPane.ERROR_MESSAGE);
                            return false;
                        }
+                    }
+                }
+                else
+                    JOptionPane.showMessageDialog(null, "Imie, nazwisko oraz miasto powinny mieć od 2 do 44 znaków.", "Błąd rejestracji", JOptionPane.ERROR_MESSAGE);
+            }
+            if(i==3) {// miasto
+                if(dane[i].length()>=2 && dane[i].length()<45) {
+                    for (int j = 0; j < dane[i].length(); j++) {
+                        char c = dane[i].charAt(j);
+                        if(!Character.isLetter(c)) {
+                            if(c != '-' && c != ' ') {
+                                JOptionPane.showMessageDialog(null, "Imie, nazwisko oraz miasto nie mogą zawierać cyfr.", "Błąd rejestracji", JOptionPane.ERROR_MESSAGE);
+                                return false;
+                            }
+                        }
                     }
                 }
                 else
